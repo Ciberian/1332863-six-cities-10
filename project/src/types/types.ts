@@ -48,6 +48,15 @@ export type Review = {
   }
 }
 
+export type UserInfo = {
+  avatarUrl: string
+  email: string
+  id: number
+  isPro: boolean
+  name: string
+  token: string
+};
+
 export type InitialState = {
   city: string;
   allOffers: Offer[] | null;
@@ -55,6 +64,7 @@ export type InitialState = {
   authorizationStatus: string;
   error: string | null;
   isDataLoaded: boolean;
+  userInfo: null | UserInfo
 };
 
 export type AuthData = {

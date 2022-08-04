@@ -1,5 +1,9 @@
 import { AppRoute } from '../../const';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutAction } from '../../store/api-actions';
+import { UserInfo } from '../../types/types';
+import { AppDispatch, State } from '../../types/state';
 
 type SiteHeaderProps = {
 	isActive: boolean;
@@ -7,6 +11,15 @@ type SiteHeaderProps = {
 };
 
 function SiteHeader({isActive, count}: SiteHeaderProps) {
+
+  const userInfo = useSelector<State, UserInfo | null>((store) => store.userInfo);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleSignOut = (evt: { preventDefault: () => void; }) => {
+    evt.preventDefault();
+    dispatch(logoutAction());
+  };
+
   return (
     <header className="header">
       <div className="container">
@@ -18,18 +31,30 @@ function SiteHeader({isActive, count}: SiteHeaderProps) {
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">
-              <li className="header__nav-item user">
-                <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
-                  <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                  <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                  <span className="header__favorite-count">{count}</span>
-                </Link>
-              </li>
-              <li className="header__nav-item">
-                <a className="header__nav-link" href="\#">
-                  <span className="header__signout">Sign out</span>
-                </a>
-              </li>
+              {userInfo ? (
+                <>
+                  <li className="header__nav-item user">
+                    <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
+                      <div className="header__avatar-wrapper user__avatar-wrapper">
+                        <img src={userInfo.avatarUrl} alt="userAvatar" />
+                      </div>
+                      <span className="header__user-name user__name">{userInfo.name}</span>
+                      <span className="header__favorite-count">{count}</span>
+                    </Link>
+                  </li>
+                  <li className="header__nav-item">
+                    <a className="header__nav-link" onClick={handleSignOut} href="\#">
+                      <span className="header__signout">Sign out</span>
+                    </a>
+                  </li>
+                </>
+              ) : (
+                <li className="header__nav-item">
+                  <Link className="header__nav-link" to={AppRoute.Login}>
+                    <span className="header__signout">Sign in</span>
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
         </div>

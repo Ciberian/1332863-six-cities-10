@@ -10,6 +10,10 @@ export const changeSortType = createAction('changeSortType', (sortType) => ({
   payload: sortType
 }));
 
+export const setUserInfo = createAction('setUserInfo', (userInfo) => ({
+  payload: userInfo
+}));
+
 export const loadOffers = createAction<Offer[]>('getHotels');
 
 export const setDataLoadedStatus = createAction<boolean>('setDataLoadedStatus');
