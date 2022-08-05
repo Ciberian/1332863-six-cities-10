@@ -55,8 +55,8 @@ function OfferPage(): JSX.Element {
     loadNearbyOffers();
   }
 
-  const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.city.location);
-  const currentPoint = offer?.city.location;
+  const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.location);
+  const currentPoint = offer?.location;
   if (currentPoint) {
     nearbyPoints?.push(currentPoint);
   }
