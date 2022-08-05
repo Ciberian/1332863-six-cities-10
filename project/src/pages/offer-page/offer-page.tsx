@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SiteHeader from '../../components/site-header/site-header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
@@ -7,35 +8,57 @@ import ReviewList from '../../components/review-list/review-list';
 import ReviewForm from '../../components/review-form/review-form';
 import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
-
-import { Offer } from '../../types/types';
+import { Offer, Review } from '../../types/types';
 import { State } from '../../types/state';
-
+import { AppRoute } from '../../const';
+import { api } from '../../store';
 
 function OfferPage(): JSX.Element {
-  const tempVarInstedReviewsArray = [
-    {
-      comment: 'string',
-      date: 'string',
-      id: 1,
-      rating: 4,
-      user: {
-        avatarUrl: 'string',
-        id: 4,
-        isPro: true,
-        name: 'string'
-      }
-    }];
+
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const allOffers = useSelector<State, Offer[] | null>((store) => store.allOffers);
-  const { id } = useParams();
   const currentOffer: Offer | undefined = (allOffers?.find((offer) => String(offer.id) === id));
-  const city = allOffers ? allOffers[0].city : null;
-  const nearPlaceOffers = allOffers?.slice(0, 3);
-  const nearPoints = nearPlaceOffers?.map((offer) => offer.location);
-  const currentPoint = currentOffer?.location;
+  const [offer, setOffer] = useState<Offer | undefined>(currentOffer);
+
+  const loadOffer = async() => {
+    try {
+      const { data } = await api.get<Offer>(`offer/${id}`);
+      setOffer(data);
+    } catch (error) {
+      navigate(AppRoute.PageNotFound);
+    }
+  };
+
+  if (!offer) {
+    loadOffer();
+  }
+
+  const [reviews, setReviews] = useState<Review[] | null>(null);
+  const loadReviews = async() => {
+    const { data } = await api.get<Review[]>(`/comments/${id}`);
+    setReviews(data);
+  };
+
+  if (!reviews) {
+    loadReviews();
+  }
+
+  const [nearbyOffers, setNearbyOffers] = useState<Offer[] | null>(null);
+  const loadNearbyOffers = async() => {
+    const { data } = await api.get<Offer[]>(`/hotels/${id}/nearby`);
+    setNearbyOffers(data);
+  };
+
+  if (!nearbyOffers) {
+    loadNearbyOffers();
+  }
+
+  const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.city.location);
+  const currentPoint = offer?.city.location;
   if (currentPoint) {
-    nearPoints?.push(currentPoint);
+    nearbyPoints?.push(currentPoint);
   }
 
   return (
@@ -106,16 +129,18 @@ function OfferPage(): JSX.Element {
                 </div>
               </div>
               <section className="property__reviews reviews">
-                <ReviewList reviews={tempVarInstedReviewsArray} />
+                {reviews ? (
+                  <ReviewList reviews={reviews} />) :
+                  null}
                 <ReviewForm />
               </section>
             </div>
           </div>
           <section className="property__map map">
-            {city && nearPoints ?
+            {offer?.city && nearbyPoints ?
               <Map
-                currentCity={city}
-                points={nearPoints}
+                currentCity={offer.city}
+                points={nearbyPoints}
                 selectedPoint={currentPoint}
               /> : ''}
           </section>
@@ -124,9 +149,9 @@ function OfferPage(): JSX.Element {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              {nearPlaceOffers ?
+              {nearbyOffers ?
                 <OfferList
-                  offers={nearPlaceOffers}
+                  offers={nearbyOffers}
                   classPrefix={'near-places'}
                 /> : ''}
             </div>
