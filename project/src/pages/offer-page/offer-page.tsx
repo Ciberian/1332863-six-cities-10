@@ -10,13 +10,15 @@ import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
 import { Offer, Review } from '../../types/types';
 import { State } from '../../types/state';
-import { AppRoute } from '../../const';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { api } from '../../store';
 
 function OfferPage(): JSX.Element {
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const authorizationStatus = useSelector<State, string>((store) => store.authorizationStatus);
+  const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
   const allOffers = useSelector<State, Offer[] | null>((store) => store.allOffers);
   const currentOffer: Offer | undefined = (allOffers?.find((offer) => String(offer.id) === id));
@@ -129,10 +131,8 @@ function OfferPage(): JSX.Element {
                 </div>
               </div>
               <section className="property__reviews reviews">
-                {reviews ? (
-                  <ReviewList reviews={reviews} />) :
-                  null}
-                <ReviewForm />
+                {reviews ? <ReviewList reviews={reviews} /> : null}
+                {isAuthorized ? <ReviewForm /> : null}
               </section>
             </div>
           </div>
