@@ -47,6 +47,11 @@ function OfferPage(): JSX.Element {
     loadReviews();
   }
 
+  const postReview = async(rating: string, comment: string) => {
+    const { data } = await api.post<Review[]>(`/comments/${id}`, {rating, comment});
+    setReviews(data);
+  };
+
   const [nearbyOffers, setNearbyOffers] = useState<Offer[] | null>(null);
   const loadNearbyOffers = async() => {
     const { data } = await api.get<Offer[]>(`/hotels/${id}/nearby`);
@@ -132,7 +137,7 @@ function OfferPage(): JSX.Element {
               </div>
               <section className="property__reviews reviews">
                 {reviews ? <ReviewList reviews={reviews} /> : null}
-                {isAuthorized ? <ReviewForm /> : null}
+                {isAuthorized ? <ReviewForm postReview={postReview} /> : null}
               </section>
             </div>
           </div>

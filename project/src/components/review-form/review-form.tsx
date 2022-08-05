@@ -6,19 +6,15 @@ const MIN_REVIEW_RATING = 1;
 const MIN_REVIEW_SIMBOLS = 50;
 const MAX_REVIEW_SIMBOLS = 300;
 
-function ReviewForm(): JSX.Element {
+function ReviewForm(props: {postReview: (rating: string, comment: string) => Promise<void>}): JSX.Element {
   const [formData, setformData] = useState({
     rating: '',
-    review: '',
+    comment: '',
   });
 
   function isReviewLongEnough(): boolean {
-    const reviewLength = formData.review.trim().length;
+    const reviewLength = formData.comment.trim().length;
     return reviewLength >= MIN_REVIEW_SIMBOLS && reviewLength <= MAX_REVIEW_SIMBOLS;
-  }
-
-  function onSendReview(rating: string, review: string) {
-    throw new Error('Function \'onSendReview\' isn\'t implemented.');
   }
 
   const formDataChangeHandler = ({ target }: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
@@ -44,8 +40,8 @@ function ReviewForm(): JSX.Element {
       method="post"
       onSubmit={(evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
-        onSendReview(formData.rating, formData.review);
-        setformData({ rating: '', review: '' });
+        props.postReview(formData.rating, formData.comment);
+        setformData({ rating: '', comment: '' });
       }}
     >
       <label className="reviews__label form__label" htmlFor="review">
@@ -55,10 +51,10 @@ function ReviewForm(): JSX.Element {
       <textarea
         className="reviews__textarea form__textarea"
         id="review"
-        name="review"
+        name="comment"
         placeholder="Tell how was your stay, what you like and what can be improved"
         onChange={formDataChangeHandler}
-        value={formData.review}
+        value={formData.comment}
       >
       </textarea>
       <div className="reviews__button-wrapper">
@@ -66,7 +62,11 @@ function ReviewForm(): JSX.Element {
 					To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least{' '}
           <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled={!isReviewLongEnough() || !formData.rating}>
+        <button
+          className="reviews__submit form__submit button"
+          type="submit"
+          disabled={!isReviewLongEnough() || !formData.rating}
+        >
 					Submit
         </button>
       </div>
