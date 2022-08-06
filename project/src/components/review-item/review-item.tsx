@@ -1,8 +1,11 @@
 import { Review } from '../../types/types';
 import dayjs from 'dayjs';
 
+type ReviewItemProps = {
+  review: Review;
+}
 
-function ReviewItem ({ review }: { review: Review }): JSX.Element {
+function ReviewItem ({ review }: ReviewItemProps): JSX.Element {
   const { user, rating, comment, date } = review;
   const formattedDate = dayjs(date).format('MMMM YYYY');
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SiteHeader from '../../components/site-header/site-header';
@@ -26,16 +26,18 @@ function OfferPage(): JSX.Element {
 
   const loadOffer = async() => {
     try {
-      const { data } = await api.get<Offer>(`offer/${id}`);
+      const { data } = await api.get<Offer>(`hotels/${id}`);
       setOffer(data);
     } catch (error) {
       navigate(AppRoute.PageNotFound);
     }
   };
 
-  if (!offer) {
-    loadOffer();
-  }
+  useEffect(() => {
+    if (!offer) {
+      loadOffer();
+    }
+  });
 
   const [reviews, setReviews] = useState<Review[] | null>(null);
   const loadReviews = async() => {
@@ -43,9 +45,11 @@ function OfferPage(): JSX.Element {
     setReviews(data);
   };
 
-  if (!reviews) {
-    loadReviews();
-  }
+  useEffect(() => {
+    if (!reviews) {
+      loadReviews();
+    }
+  });
 
   const postReview = async(rating: string, comment: string) => {
     const { data } = await api.post<Review[]>(`/comments/${id}`, {rating, comment});
@@ -58,9 +62,11 @@ function OfferPage(): JSX.Element {
     setNearbyOffers(data);
   };
 
-  if (!nearbyOffers) {
-    loadNearbyOffers();
-  }
+  useEffect(() => {
+    if (!nearbyOffers) {
+      loadNearbyOffers();
+    }
+  });
 
   const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.location);
   const currentPoint = offer?.location;
@@ -125,14 +131,15 @@ function OfferPage(): JSX.Element {
                   {currentOffer?.host.isPro ? <span className="property__user-status">Pro</span> : ''}
                 </div>
                 <div className="property__description">
-                  <p className="property__text">
-                    {`${currentOffer?.description.split('.')[0]}.`}
-                  </p>
-                  {currentOffer && currentOffer?.description.split('.').length >= 2 ? (
-                    <p className="property__text">
-                      {`${currentOffer?.description.split('.')[1]}.`}
-                    </p>
-                  ) : ''}
+                  {currentOffer?.description
+                    .split('.')
+                    .filter((sentence) => sentence !== '')
+                    .map((sentence) => sentence.replace(/^ +/, ''))
+                    .map((sentence) => (
+                      <p className="property__text" key={sentence}>
+                        {`${sentence}.`}
+                      </p>
+                    ))}
                 </div>
               </div>
               <section className="property__reviews reviews">

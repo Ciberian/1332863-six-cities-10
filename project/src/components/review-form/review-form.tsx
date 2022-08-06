@@ -6,7 +6,11 @@ const MIN_REVIEW_RATING = 1;
 const MIN_REVIEW_SIMBOLS = 50;
 const MAX_REVIEW_SIMBOLS = 300;
 
-function ReviewForm(props: {postReview: (rating: string, comment: string) => Promise<void>}): JSX.Element {
+type ReviewFormProps = {
+  postReview: (rating: string, comment: string) => Promise<void>
+}
+
+function ReviewForm({ postReview }: ReviewFormProps): JSX.Element {
   const [formData, setformData] = useState({
     rating: '',
     comment: '',
@@ -40,7 +44,7 @@ function ReviewForm(props: {postReview: (rating: string, comment: string) => Pro
       method="post"
       onSubmit={(evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
-        props.postReview(formData.rating, formData.comment);
+        postReview(formData.rating, formData.comment);
         setformData({ rating: '', comment: '' });
       }}
     >
