@@ -6,7 +6,7 @@ import OfferPage from '../../pages/offer-page/offer-page';
 import PageNotFound from '../../pages/page-not-found/page-not-found';
 import PrivateRoute from '../private-route/private-route';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { State } from '../../types/state';
 
@@ -35,6 +35,10 @@ function App(): JSX.Element {
           />
           <Route path={AppRoute.Offer} element={<OfferPage />} />
           <Route path={AppRoute.PageNotFound} element={<PageNotFound />} />
+          <Route path='*' element={
+            <Navigate to={AppRoute.PageNotFound} />
+          }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

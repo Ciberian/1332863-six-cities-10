@@ -3,7 +3,7 @@ export enum AppRoute {
   Login = '/login',
   Favorites = '/favorites',
   Offer = '/offer/:id',
-  PageNotFound = '*'
+  PageNotFound = '/page_not_found'
 }
 
 export enum APIRoute {
