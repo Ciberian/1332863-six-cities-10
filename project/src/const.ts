@@ -2,19 +2,20 @@ export enum AppRoute {
   Root = '/',
   Login = '/login',
   Favorites = '/favorites',
-  Offer = '/offer/:id'
-}
-
-export enum AuthorizationStatus {
-  Auth = 'AUTH',
-  NoAuth = 'NO_AUTH',
-  Unknown = 'UNKNOWN',
+  Offer = '/offer/:id',
+  PageNotFound = '/page_not_found'
 }
 
 export enum APIRoute {
   Offers = '/hotels',
   Login = '/login',
   Logout = '/logout',
+}
+
+export enum AuthorizationStatus {
+  Auth = 'AUTH',
+  NoAuth = 'NO_AUTH',
+  Unknown = 'UNKNOWN',
 }
 
 export enum SortType {

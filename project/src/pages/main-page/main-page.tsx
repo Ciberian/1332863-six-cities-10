@@ -1,16 +1,22 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import SiteHeader from '../../components/site-header/site-header';
 import LocationList from '../../components/location-list/location-list';
+import OfferListEmpty from '../../components/offer-list-empty/offer-list-empty';
 import SortOffers from '../../components/sort-offers/sort-offers';
 import OfferList from '../../components/offer-list/offer-list';
-import OfferListEmpty from '../../components/offer-list-empty/offer-list-empty';
 import Map from '../../components/map/map';
+import { fetchOffersAction } from '../../store/api-actions';
+import { AppDispatch, State } from '../../types/state';
 import { Offer, Point } from '../../types/types';
-import { State } from '../../types/state';
 import { SortType } from '../../const';
 
 function MainPage(): JSX.Element {
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(fetchOffersAction());
+  });
+
   const cityName = useSelector<State, string>((store) => store.city);
   const allOffers = useSelector<State, Offer[] | null>((store) => store.allOffers);
   const currentSortType = useSelector<State, string>((store) => store.sortType);

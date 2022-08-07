@@ -9,13 +9,7 @@ type OfferCardProps = {
 }
 
 function OfferCard({ offer, classPrefix, onOfferCardHover, onOfferCardLeave }: OfferCardProps): JSX.Element {
-  const { isFavorite, isPremium, previewImage, price, rating, description, type, id } = offer;
-
-  const shortDescription = description
-    .split(' ')
-    .slice(0, 7)
-    .join(' ')
-    .replace(/(\.|,)$/, '');
+  const { isFavorite, isPremium, previewImage, price, rating, title, type, id } = offer;
 
   return (
     <article
@@ -59,7 +53,7 @@ function OfferCard({ offer, classPrefix, onOfferCardHover, onOfferCardLeave }: O
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`/offer/${String(id)}`}>{shortDescription}</Link>
+          <Link to={`/offer/${String(id)}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{type[0].toUpperCase() + type.substring(1)}</p>
       </div>

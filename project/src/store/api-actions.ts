@@ -17,7 +17,7 @@ export const clearErrorAction = createAsyncThunk(
   },
 );
 
-export const fetchOfferAction = createAsyncThunk<
+export const fetchOffersAction = createAsyncThunk<
 	void,
 	undefined,
 	{
