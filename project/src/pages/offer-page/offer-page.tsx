@@ -82,19 +82,19 @@ function OfferPage(): JSX.Element {
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {currentOffer ? <OfferGallery images={currentOffer.images} /> : <p>There are no pictures of this property</p>}
+              {offer ? <OfferGallery images={offer.images} /> : <p>There are no pictures of this property</p>}
             </div>
           </div>
           <div className="property__container container">
             <div className="property__wrapper">
-              {currentOffer?.isPremium ?
+              {offer?.isPremium ?
                 <div className="property__mark">
                   <span>Premium</span>
                 </div> : ''}
 
               <div className="property__name-wrapper">
-                <h1 className="property__name">{currentOffer?.title}</h1>
-                <button className={`property__bookmark-button ${currentOffer && currentOffer.isFavorite ? 'property__bookmark-button--active' : ''} button`} type="button">
+                <h1 className="property__name">{offer?.title}</h1>
+                <button className={`property__bookmark-button ${offer && offer.isFavorite ? 'property__bookmark-button--active' : ''} button`} type="button">
                   <svg className="place-card__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -103,35 +103,35 @@ function OfferPage(): JSX.Element {
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{width: `${currentOffer?.rating ? Math.round(currentOffer?.rating) * 20 : 0}%`}}></span>
+                  <span style={{width: `${offer?.rating ? Math.round(offer?.rating) * 20 : 0}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
-                <span className="property__rating-value rating__value">{currentOffer?.rating}</span>
+                <span className="property__rating-value rating__value">{offer?.rating}</span>
               </div>
               <ul className="property__features">
-                <li className="property__feature property__feature--entire">{currentOffer?.type ? currentOffer?.type[0].toUpperCase() + currentOffer?.type.substring(1) : ''}</li>
-                <li className="property__feature property__feature--bedrooms">{currentOffer?.bedrooms} Bedrooms</li>
-                <li className="property__feature property__feature--adults">Max {currentOffer?.maxAdults} adults</li>
+                <li className="property__feature property__feature--entire">{offer?.type ? offer?.type[0].toUpperCase() + offer?.type.substring(1) : ''}</li>
+                <li className="property__feature property__feature--bedrooms">{offer?.bedrooms} Bedrooms</li>
+                <li className="property__feature property__feature--adults">Max {offer?.maxAdults} adults</li>
               </ul>
               <div className="property__price">
-                <b className="property__price-value">&euro;{currentOffer?.price}</b>
+                <b className="property__price-value">&euro;{offer?.price}</b>
                 <span className="property__price-text">&nbsp;night</span>
               </div>
               <div className="property__inside">
                 <h2 className="property__inside-title">What&apos;s inside</h2>
-                {currentOffer ? <OfferItems items={currentOffer.goods} /> : <p>There are no special items for this property</p>}
+                {offer ? <OfferItems items={offer.goods} /> : <p>There are no special items for this property</p>}
               </div>
               <div className="property__host">
                 <h2 className="property__host-title">Meet the host</h2>
                 <div className="property__host-user user">
                   <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
-                    <img className="property__avatar user__avatar" src={currentOffer?.host.avatarUrl} width="74" height="74" alt="Host avatar" />
+                    <img className="property__avatar user__avatar" src={offer?.host.avatarUrl} width="74" height="74" alt="Host avatar" />
                   </div>
-                  <span className="property__user-name">{currentOffer?.host.name}</span>
-                  {currentOffer?.host.isPro ? <span className="property__user-status">Pro</span> : ''}
+                  <span className="property__user-name">{offer?.host.name}</span>
+                  {offer?.host.isPro ? <span className="property__user-status">Pro</span> : ''}
                 </div>
                 <div className="property__description">
-                  {currentOffer?.description
+                  {offer?.description
                     .split('.')
                     .filter((sentence) => sentence !== '')
                     .map((sentence) => sentence.replace(/^ +/, ''))
