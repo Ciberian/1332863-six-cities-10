@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SiteHeader from '../../components/site-header/site-header';
@@ -14,6 +14,8 @@ import { AppRoute, AuthorizationStatus } from '../../const';
 import { api } from '../../store';
 
 function OfferPage(): JSX.Element {
+  const renderCount = useRef(1);
+  console.log('render', renderCount.current++);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -24,32 +26,32 @@ function OfferPage(): JSX.Element {
   const currentOffer: Offer | undefined = (allOffers?.find((offer) => String(offer.id) === id));
   const [offer, setOffer] = useState<Offer | undefined>(currentOffer);
 
-  const loadOffer = async() => {
+  const loadOffer = useCallback(async() => {
     try {
       const { data } = await api.get<Offer>(`hotels/${id}`);
       setOffer(data);
     } catch (error) {
       navigate(AppRoute.PageNotFound);
     }
-  };
+  }, [id, navigate]);
 
   useEffect(() => {
     if (!offer) {
       loadOffer();
     }
-  });
+  }, [offer, loadOffer]);
 
   const [reviews, setReviews] = useState<Review[] | null>(null);
-  const loadReviews = async() => {
+  const loadReviews = useCallback(async() => {
     const { data } = await api.get<Review[]>(`/comments/${id}`);
     setReviews(data);
-  };
+  }, [id]);
 
   useEffect(() => {
     if (!reviews) {
       loadReviews();
     }
-  });
+  }, [reviews, loadReviews]);
 
   const postReview = async(rating: string, comment: string) => {
     const { data } = await api.post<Review[]>(`/comments/${id}`, {rating, comment});
@@ -57,16 +59,16 @@ function OfferPage(): JSX.Element {
   };
 
   const [nearbyOffers, setNearbyOffers] = useState<Offer[] | null>(null);
-  const loadNearbyOffers = async() => {
+  const loadNearbyOffers = useCallback(async() => {
     const { data } = await api.get<Offer[]>(`/hotels/${id}/nearby`);
     setNearbyOffers(data);
-  };
+  }, [id]);
 
   useEffect(() => {
     if (!nearbyOffers) {
       loadNearbyOffers();
     }
-  });
+  }, [nearbyOffers, loadNearbyOffers]);
 
   const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.location);
   const currentPoint = offer?.location;
