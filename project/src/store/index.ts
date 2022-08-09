@@ -1,11 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createAPI } from '../services/api';
-import { reducer } from './reducer';
 
 export const api = createAPI();
 
 export const store = configureStore({
-  reducer,
+  // Временно удаляем reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: {
