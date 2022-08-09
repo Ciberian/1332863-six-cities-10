@@ -8,7 +8,7 @@ const initialState: OfferData = {
   isDataLoaded: false,
 };
 
-export const gameData = createSlice({
+export const offersData = createSlice({
   name: NameSpace.Data,
   initialState,
   reducers: {},
