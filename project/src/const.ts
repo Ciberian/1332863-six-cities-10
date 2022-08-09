@@ -41,6 +41,12 @@ export const CITIES = [
   'Dusseldorf'
 ];
 
+export enum NameSpace {
+  Data = 'DATA',
+  User = 'USER',
+  AndSomethingElse = 'I DONT KNOW WTF IS THIS EXACTLY'
+}
+
 export const URL_MARKER_DEFAULT = 'img/pin.svg';
 
 export const URL_MARKER_CURRENT = 'img/pin-active.svg';
