@@ -18,7 +18,7 @@ function LoginPage(): JSX.Element {
     if (authorizationStatus === AuthorizationStatus.Auth) {
       navigate(AppRoute.Root);
     }
-  });
+  }, [authorizationStatus, navigate]);
 
   const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));

@@ -15,7 +15,7 @@ function MainPage(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(fetchOffersAction());
-  });
+  }, [dispatch]);
 
   const cityName = useSelector<State, string>((store) => store.city);
   const allOffers = useSelector<State, Offer[] | null>((store) => store.allOffers);

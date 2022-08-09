@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SiteHeader from '../../components/site-header/site-header';
@@ -14,8 +14,6 @@ import { AppRoute, AuthorizationStatus } from '../../const';
 import { api } from '../../store';
 
 function OfferPage(): JSX.Element {
-  const renderCount = useRef(1);
-  console.log('render', renderCount.current++);
 
   const { id } = useParams();
   const navigate = useNavigate();
