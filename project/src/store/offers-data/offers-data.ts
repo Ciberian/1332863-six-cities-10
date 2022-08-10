@@ -5,6 +5,8 @@ import { fetchOffersAction } from '../api-actions';
 
 const initialState: OfferData = {
   offers: [],
+  city: null,
+  sortType: null,
   isDataLoaded: false,
 };
 
