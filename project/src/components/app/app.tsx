@@ -7,13 +7,16 @@ import PageNotFound from '../../pages/page-not-found/page-not-found';
 import PrivateRoute from '../private-route/private-route';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { getLoadedDataStatus } from '../../store/offers-data/selectors';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { State } from '../../types/state';
 
 const isCheckedAuth = (authorizationStatus: string): boolean => authorizationStatus === AuthorizationStatus.Unknown;
 
 function App(): JSX.Element {
-  const { authorizationStatus, isDataLoaded } = useSelector<State, State>((state) => state);
+  const authorizationStatus = useSelector<State, string>(getAuthorizationStatus);
+  const isDataLoaded = useSelector<State, boolean>(getLoadedDataStatus);
 
   if (isCheckedAuth(authorizationStatus) || isDataLoaded) {
     return (

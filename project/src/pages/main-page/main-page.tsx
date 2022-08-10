@@ -10,6 +10,7 @@ import { fetchOffersAction } from '../../store/api-actions';
 import { AppDispatch, State } from '../../types/state';
 import { Offer, Point } from '../../types/types';
 import { SortType } from '../../const';
+import { getCity, getOffers, getSortType } from '../../store/offers-data/selectors';
 
 function MainPage(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,9 +18,9 @@ function MainPage(): JSX.Element {
     dispatch(fetchOffersAction());
   }, [dispatch]);
 
-  const cityName = useSelector<State, string>((store) => store.city);
-  const allOffers = useSelector<State, Offer[] | null>((store) => store.allOffers);
-  const currentSortType = useSelector<State, string>((store) => store.sortType);
+  const cityName = useSelector<State, string>(getCity);
+  const allOffers = useSelector<State, Offer[] | null>(getOffers);
+  const currentSortType = useSelector<State, string>(getSortType);
 
   const cityOffers = allOffers?.filter((offer) => offer.city.name === cityName);
   const currentCity = cityOffers ? cityOffers[0].city : null;
