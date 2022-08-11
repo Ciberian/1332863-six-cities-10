@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { changeCity } from '../../store/action';
+import { changeCity } from '../../store/actions';
 import { AppDispatch } from '../../types/state';
 
 type LocationProps = {

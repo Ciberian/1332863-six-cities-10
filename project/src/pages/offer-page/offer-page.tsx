@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import SiteHeader from '../../components/site-header/site-header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import OfferItems from '../../components/offer-items/offer-items';
@@ -8,19 +7,21 @@ import ReviewList from '../../components/review-list/review-list';
 import ReviewForm from '../../components/review-form/review-form';
 import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
-import { Offer, Review } from '../../types/types';
-import { State } from '../../types/state';
+import { useAppSelector } from '../../hooks';
 import { AppRoute, AuthorizationStatus } from '../../const';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { getOffers } from '../../store/offers-data/selectors';
+import { Offer, Review } from '../../types/types';
 import { api } from '../../store';
 
 function OfferPage(): JSX.Element {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const authorizationStatus = useSelector<State, string>((store) => store.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
-  const allOffers = useSelector<State, Offer[] | null>((store) => store.allOffers);
+  const allOffers = useAppSelector(getOffers);
   const currentOffer: Offer | undefined = (allOffers?.find((offer) => String(offer.id) === id));
   const [offer, setOffer] = useState<Offer | undefined>(currentOffer);
 

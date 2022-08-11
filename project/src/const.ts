@@ -43,8 +43,7 @@ export const CITIES = [
 
 export enum NameSpace {
   Data = 'DATA',
-  User = 'USER',
-  AndSomethingElse = 'I DONT KNOW WTF IS THIS EXACTLY'
+  User = 'USER'
 }
 
 export const URL_MARKER_DEFAULT = 'img/pin.svg';

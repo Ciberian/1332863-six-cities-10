@@ -1,9 +1,10 @@
 import { store } from '../store/index.js';
 import { AuthorizationStatus } from '../const';
-import { Offer } from './types.js';
+import { Offer, UserInfo } from './types';
 
 export type UserProcess = {
-  authorizationStatus: AuthorizationStatus
+  authorizationStatus: AuthorizationStatus,
+  userInfo: null | UserInfo
 };
 
 export type OfferData = {
@@ -11,6 +12,7 @@ export type OfferData = {
   city: string,
   sortType: string,
   isDataLoaded: boolean,
+  error: string | null
 };
 
 export type State = ReturnType<typeof store.getState>;

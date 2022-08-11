@@ -1,9 +1,8 @@
-import { AppRoute } from '../../const';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { getUserInfo } from '../../store/user-process/selectors';
 import { logoutAction } from '../../store/api-actions';
-import { UserInfo } from '../../types/types';
-import { AppDispatch, State } from '../../types/state';
+import { AppRoute } from '../../const';
 
 type SiteHeaderProps = {
 	isActive: boolean;
@@ -12,8 +11,8 @@ type SiteHeaderProps = {
 
 function SiteHeader({isActive, count}: SiteHeaderProps) {
 
-  const userInfo = useSelector<State, UserInfo | null>((store) => store.userInfo);
-  const dispatch = useDispatch<AppDispatch>();
+  const userInfo = useAppSelector(getUserInfo);
+  const dispatch = useAppDispatch();
 
   const handleSignOut = (evt: { preventDefault: () => void; }) => {
     evt.preventDefault();

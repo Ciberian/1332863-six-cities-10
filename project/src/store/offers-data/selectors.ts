@@ -6,3 +6,4 @@ export const getCity = (state: State): string => state[NameSpace.Data].city;
 export const getSortType = (state: State): string => state[NameSpace.Data].sortType;
 export const getOffers = (state: State): Offer[] => state[NameSpace.Data].offers;
 export const getLoadedDataStatus = (state: State): boolean => state[NameSpace.Data].isDataLoaded;
+export const getErrorMessage = (state: State): string | null => state[NameSpace.Data].error;

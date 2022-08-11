@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux';
 import LocationItem from '../location-item/location-item';
+import { getCity } from '../../store/offers-data/selectors';
+import { useAppSelector } from '../../hooks';
 import { CITIES } from '../../const';
-import { State } from '../../types/state';
 
 function LocationList(): JSX.Element {
-  const cityName = useSelector<State>((store) => store.city);
+  const cityName = useAppSelector(getCity);
 
   return (
     <ul className="locations__list tabs__list">

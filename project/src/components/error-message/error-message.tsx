@@ -1,9 +1,9 @@
-import { useSelector } from 'react-redux';
-import { State } from '../../types/state';
+import { useAppSelector } from '../../hooks';
+import { getErrorMessage } from '../../store/offers-data/selectors';
 import './error-message.css';
 
 function ErrorMessage(): JSX.Element | null {
-  const error = useSelector<State, string | null>((state) => state.error);
+  const error = useAppSelector(getErrorMessage);
 
   return (error)
     ? <div className='error-message'>{error}</div>
