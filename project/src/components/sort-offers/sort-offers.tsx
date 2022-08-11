@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeSortType } from '../../store/action';
-import { AppDispatch, State } from '../../types/state';
+import { useState } from 'react';
+import { getSortType } from '../../store/offers-data/selectors';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { changeSortType } from '../../store/actions';
 import { SORT_TYPES } from '../../const';
 
 function SortOffers(): JSX.Element {
   const [activeClass, setActiveClass] = useState<string>('');
-  const currentSortType = useSelector<State>((store) => store.sortType);
-  const dispatch = useDispatch<AppDispatch>();
+  const currentSortType = useAppSelector(getSortType);
+  const dispatch = useAppDispatch();
 
   const toggleActiveClass = () => {
     if (activeClass) {

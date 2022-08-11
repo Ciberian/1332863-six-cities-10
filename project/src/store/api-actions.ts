@@ -26,10 +26,7 @@ export const fetchOffersAction = createAsyncThunk<Offer[], undefined, {
   return data;
 });
 
-export const checkAuthAction = createAsyncThunk<
-	void,
-	undefined,
-	{
+export const checkAuthAction = createAsyncThunk<void, undefined, {
 		dispatch: AppDispatch;
 		state: State;
 		extra: AxiosInstance;

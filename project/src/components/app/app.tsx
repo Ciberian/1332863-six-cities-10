@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hooks';
 import MainPage from '../../pages/main-page/main-page';
 import LoginPage from '../../pages/login-page/login-page';
 import FavoritesPage from '../../pages/favorites-page/favorites-page';
@@ -10,13 +10,12 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { getLoadedDataStatus } from '../../store/offers-data/selectors';
 import { AppRoute, AuthorizationStatus } from '../../const';
-import { State } from '../../types/state';
 
 const isCheckedAuth = (authorizationStatus: string): boolean => authorizationStatus === AuthorizationStatus.Unknown;
 
 function App(): JSX.Element {
-  const authorizationStatus = useSelector<State, string>(getAuthorizationStatus);
-  const isDataLoaded = useSelector<State, boolean>(getLoadedDataStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isDataLoaded = useAppSelector(getLoadedDataStatus);
 
   if (isCheckedAuth(authorizationStatus) || isDataLoaded) {
     return (

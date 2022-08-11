@@ -8,8 +8,8 @@ export type UserProcess = {
 
 export type OfferData = {
   offers: Offer[],
-  city: string | null,
-  sortType: string | null,
+  city: string,
+  sortType: string,
   isDataLoaded: boolean,
 };
 
