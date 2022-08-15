@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace, SortType } from '../../const';
+import { SelectedSort } from '../../types/state';
 import { changeSortType } from '../actions';
 
-const initialState = {
+const initialState: SelectedSort = {
   sortType: SortType.Popular,
 };
 
-export const offersData = createSlice({
+export const selectedSort = createSlice({
   name: NameSpace.Sort,
   initialState,
   reducers: {},

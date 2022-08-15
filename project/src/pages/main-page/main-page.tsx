@@ -8,7 +8,9 @@ import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
 import { Offer, Point } from '../../types/types';
 import { SortType } from '../../const';
-import { getCity, getOffers, getSortType } from '../../store/offers-data/selectors';
+import { getOffers } from '../../store/offers-data/selectors';
+import { getCity } from '../../store/selected-city/selectors';
+import { getSortType } from '../../store/selected-sort/selectors';
 
 function MainPage(): JSX.Element {
   const cityName = useAppSelector(getCity);
