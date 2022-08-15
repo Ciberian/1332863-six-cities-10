@@ -1,22 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../../hooks/index';
+import { useState } from 'react';
+import { useAppSelector } from '../../hooks/index';
 import SiteHeader from '../../components/site-header/site-header';
 import LocationList from '../../components/location-list/location-list';
 import OfferListEmpty from '../../components/offer-list-empty/offer-list-empty';
 import SortOffers from '../../components/sort-offers/sort-offers';
 import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
-import { fetchOffersAction } from '../../store/api-actions';
 import { Offer, Point } from '../../types/types';
 import { SortType } from '../../const';
 import { getCity, getOffers, getSortType } from '../../store/offers-data/selectors';
 
 function MainPage(): JSX.Element {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchOffersAction());
-  }, [dispatch]);
-
   const cityName = useAppSelector(getCity);
   const allOffers = useAppSelector(getOffers);
   const currentSortType = useAppSelector(getSortType);

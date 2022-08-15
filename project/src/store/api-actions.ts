@@ -5,13 +5,16 @@ import { saveToken, dropToken } from '../services/token';
 import { APIRoute, TIMEOUT_SHOW_ERROR } from '../const';
 import { Offer, UserData, AuthData } from '../types/types';
 import { setUserInfo, setError } from './actions';
-import {store} from './';
 
-export const clearErrorAction = createAsyncThunk(
-  'clearError',
-  () => {
+export const clearErrorAction = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}
+>('clearError',
+  (_arg, { dispatch }) => {
     setTimeout(
-      () => store.dispatch(setError(null)),
+      () => dispatch(setError(null)),
       TIMEOUT_SHOW_ERROR,
     );
   },

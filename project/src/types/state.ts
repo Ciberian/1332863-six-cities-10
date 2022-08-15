@@ -9,8 +9,6 @@ export type UserProcess = {
 
 export type OfferData = {
   offers: Offer[],
-  city: string,
-  sortType: string,
   isDataLoaded: boolean,
   error: string | null
 };
