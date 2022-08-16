@@ -6,8 +6,10 @@ import { fetchOffersAction } from '../api-actions';
 const initialState: OfferData = {
   offers: [],
   isDataLoaded: false,
-  error: false,
+  error: null,
 };
+
+const OFFERS_ERROR_MESSAGE = 'Offers cannot be downloaded at the moment, or you have made an incorrect request';
 
 export const offersData = createSlice({
   name: NameSpace.Data,
@@ -22,8 +24,8 @@ export const offersData = createSlice({
         state.offers = action.payload;
         state.isDataLoaded = true;
       })
-      .addCase(fetchOffersAction.rejected, (state, action) => {
-        state.error = true;
+      .addCase(fetchOffersAction.rejected, (state) => {
+        state.error = OFFERS_ERROR_MESSAGE;
         state.isDataLoaded = true;
       });
   }

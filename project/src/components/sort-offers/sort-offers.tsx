@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getSortType } from '../../store/offers-data/selectors';
+import { getSortType } from '../../store/selected-sort/selectors';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { changeSortType } from '../../store/actions';
 import { SORT_TYPES } from '../../const';

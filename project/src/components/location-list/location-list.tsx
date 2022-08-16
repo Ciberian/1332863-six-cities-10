@@ -1,5 +1,5 @@
 import LocationItem from '../location-item/location-item';
-import { getCity } from '../../store/offers-data/selectors';
+import { getCity } from '../../store/selected-city/selectors';
 import { useAppSelector } from '../../hooks';
 import { CITIES } from '../../const';
 

@@ -18,7 +18,7 @@ export type UserProcess = {
 export type OfferData = {
   offers: Offer[],
   isDataLoaded: boolean,
-  error: boolean
+  error: null | string
 };
 
 export type State = ReturnType<typeof store.getState>;
