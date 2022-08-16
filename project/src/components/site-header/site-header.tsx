@@ -10,7 +10,6 @@ type SiteHeaderProps = {
 };
 
 function SiteHeader({isActive, count}: SiteHeaderProps) {
-
   const userInfo = useAppSelector(getUserInfo);
   const dispatch = useAppDispatch();
 

@@ -4,7 +4,7 @@ import { AppDispatch, State } from '../types/state';
 import { saveToken, dropToken } from '../services/token';
 import { APIRoute, TIMEOUT_SHOW_ERROR } from '../const';
 import { Offer, UserData, AuthData } from '../types/types';
-import { setUserInfo, setError } from './actions';
+import { setError } from './actions';
 
 export const clearErrorAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
@@ -30,17 +30,18 @@ export const fetchOffersAction = createAsyncThunk<Offer[], undefined, {
   return data;
 });
 
-export const checkAuthAction = createAsyncThunk<void, undefined, {
+export const checkAuthAction = createAsyncThunk<UserData, undefined, {
 		dispatch: AppDispatch;
 		state: State;
 		extra: AxiosInstance;
 	}
->('checkAuth', async (_arg, { dispatch, extra: api }) => {
-  await api.get(APIRoute.Login);
+>('user/checkAuth', async (_arg, { dispatch, extra: api }) => {
+  const { data } = await api.get(APIRoute.Login);
+  return data;
 });
 
 export const loginAction = createAsyncThunk<
-	void,
+	UserData,
 	AuthData,
 	{
 		dispatch: AppDispatch;
@@ -50,7 +51,7 @@ export const loginAction = createAsyncThunk<
 >('user/login', async ({ login: email, password }, { dispatch, extra: api }) => {
   const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
   saveToken(data.token);
-  dispatch(setUserInfo(data));
+  return data;
 });
 
 export const logoutAction = createAsyncThunk<
@@ -64,5 +65,4 @@ export const logoutAction = createAsyncThunk<
 >('user/logout', async (_arg, { dispatch, extra: api }) => {
   await api.delete(APIRoute.Logout);
   dropToken();
-  dispatch(setUserInfo(null));
 });

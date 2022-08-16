@@ -78,7 +78,7 @@ function LoginPage(): JSX.Element {
                   type="password"
                   name="password"
                   placeholder="Password"
-                  pattern="(?=.*[0-9])(?=.*[a-zA-Z | а-яёЁА-Я])[a-zA-Zа-яёЁА-Я0-9]{2,16}"
+                  pattern="(?=.*[0-9])(?=.*[a-zA-Z | а-яёЁА-Я])[a-zA-Zа-яёЁА-Я0-9]{2,42}"
                   required
                 />
               </div>
