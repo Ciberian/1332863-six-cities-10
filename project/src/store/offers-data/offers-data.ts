@@ -20,6 +20,9 @@ export const offersData = createSlice({
       .addCase(fetchOffersAction.fulfilled, (state, action) => {
         state.offers = action.payload;
         state.isDataLoaded = true;
+      })
+      .addCase(fetchOffersAction.rejected, (state, action) => {
+        state.isDataLoaded = true;
       });
   }
 });
