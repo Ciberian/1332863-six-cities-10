@@ -1,6 +1,6 @@
 import { store } from '../store/index.js';
 import { AuthorizationStatus } from '../const';
-import { Offer, UserInfo } from './types';
+import { Offer, Point, UserInfo } from './types';
 
 export type SelectedCity = {
   city: string
@@ -8,6 +8,10 @@ export type SelectedCity = {
 
 export type SelectedSort = {
   sortType: string;
+};
+
+export type SelectedPoint = {
+  point: null | Point;
 };
 
 export type CurrentError = {

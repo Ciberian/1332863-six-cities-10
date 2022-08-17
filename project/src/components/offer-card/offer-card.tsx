@@ -1,20 +1,21 @@
 import { Link } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks';
 import { Offer } from '../../types/types';
+import { setPoint } from '../../store/selected-point/selected-point';
 
 type OfferCardProps = {
   offer: Offer;
   classPrefix: string;
-  onOfferCardHover?: (hoveredOffer: Offer | null) => void;
-  onOfferCardLeave?: () => void;
 }
 
-function OfferCard({ offer, classPrefix, onOfferCardHover, onOfferCardLeave }: OfferCardProps): JSX.Element {
-  const { isFavorite, isPremium, previewImage, price, rating, title, type, id } = offer;
+function OfferCard({ offer, classPrefix }: OfferCardProps): JSX.Element {
+  const { isFavorite, isPremium, previewImage, price, rating, title, type, location, id } = offer;
+  const dispatch = useAppDispatch();
 
   return (
     <article
-      onMouseEnter={() => onOfferCardHover && onOfferCardHover(offer)}
-      onMouseLeave={() => onOfferCardLeave && onOfferCardLeave()}
+      onMouseEnter={() => dispatch(setPoint(location))}
+      onMouseLeave={() => dispatch(setPoint(null))}
       className={`${classPrefix}__card place-card`}
     >
       {isPremium && (

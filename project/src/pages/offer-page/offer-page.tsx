@@ -154,7 +154,6 @@ function OfferPage(): JSX.Element {
               <Map
                 currentCity={offer.city}
                 points={nearbyPoints}
-                selectedPoint={currentPoint}
               /> : ''}
           </section>
         </section>

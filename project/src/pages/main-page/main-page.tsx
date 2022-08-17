@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useAppSelector } from '../../hooks/index';
 import SiteHeader from '../../components/site-header/site-header';
 import LocationList from '../../components/location-list/location-list';
@@ -6,7 +5,7 @@ import OfferListEmpty from '../../components/offer-list-empty/offer-list-empty';
 import SortOffers from '../../components/sort-offers/sort-offers';
 import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
-import { Offer, Point } from '../../types/types';
+import { Offer } from '../../types/types';
 import { SortType } from '../../const';
 import { getOffers } from '../../store/offers-data/selectors';
 import { getCity } from '../../store/selected-city/selectors';
@@ -16,7 +15,6 @@ function MainPage(): JSX.Element {
   const cityName = useAppSelector(getCity);
   const allOffers = useAppSelector(getOffers);
   const currentSortType = useAppSelector(getSortType);
-  const [selectedPoint, setSelectedPoint] = useState<Point | undefined>(undefined);
 
   if (allOffers.length) {
     const cityOffers = allOffers?.filter((offer) => offer.city.name === cityName);
@@ -36,17 +34,6 @@ function MainPage(): JSX.Element {
         default:
           return offers;
       }
-    };
-
-    const handleOfferCardHover = (hoveredOffer: Offer | null) => {
-      const currentOffer = cityOffers?.find((offer) =>
-        offer.id === hoveredOffer?.id,
-      );
-      setSelectedPoint(currentOffer?.location);
-    };
-
-    const handleOfferCardLeave = () => {
-      setSelectedPoint(undefined);
     };
 
     return (
@@ -71,8 +58,6 @@ function MainPage(): JSX.Element {
                     <OfferList
                       offers={sortOffers(currentSortType, cityOffers)}
                       classPrefix={'cities'}
-                      onOfferCardHover={handleOfferCardHover}
-                      onOfferCardLeave={handleOfferCardLeave}
                     />
                   </div>
                 </section>
@@ -82,7 +67,6 @@ function MainPage(): JSX.Element {
                       <Map
                         currentCity={currentCity}
                         points={points}
-                        selectedPoint={selectedPoint}
                       /> : ''}
                   </section>
                 </div>
