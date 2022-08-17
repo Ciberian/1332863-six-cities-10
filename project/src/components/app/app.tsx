@@ -9,15 +9,13 @@ import LoadingScreen from '../loading-screen/loading-screen';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { getLoadedDataStatus } from '../../store/offers-data/selectors';
-import { AppRoute, AuthorizationStatus } from '../../const';
-
-const isCheckedAuth = (authorizationStatus: string): boolean => authorizationStatus === AuthorizationStatus.Unknown;
+import { AppRoute } from '../../const';
 
 function App(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isDataLoaded = useAppSelector(getLoadedDataStatus);
 
-  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
+  if (!isDataLoaded) {
     return (
       <LoadingScreen />
     );

@@ -14,8 +14,16 @@ function OfferCard({ offer, classPrefix }: OfferCardProps): JSX.Element {
 
   return (
     <article
-      onMouseEnter={() => dispatch(setPoint(location))}
-      onMouseLeave={() => dispatch(setPoint(null))}
+      onMouseEnter={() => {
+        if (classPrefix === 'cities') {
+          dispatch(setPoint(location));
+        }
+      }}
+      onMouseLeave={() => {
+        if (classPrefix === 'cities') {
+          dispatch(setPoint(null));
+        }
+      }}
       className={`${classPrefix}__card place-card`}
     >
       {isPremium && (
