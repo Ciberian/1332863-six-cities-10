@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hooks';
 import MainPage from '../../pages/main-page/main-page';
 import LoginPage from '../../pages/login-page/login-page';
 import FavoritesPage from '../../pages/favorites-page/favorites-page';
@@ -7,15 +7,15 @@ import PageNotFound from '../../pages/page-not-found/page-not-found';
 import PrivateRoute from '../private-route/private-route';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../const';
-import { State } from '../../types/state';
-
-const isCheckedAuth = (authorizationStatus: string): boolean => authorizationStatus === AuthorizationStatus.Unknown;
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { getLoadedDataStatus } from '../../store/offers-data/selectors';
+import { AppRoute } from '../../const';
 
 function App(): JSX.Element {
-  const { authorizationStatus, isDataLoaded } = useSelector<State, State>((state) => state);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isDataLoaded = useAppSelector(getLoadedDataStatus);
 
-  if (isCheckedAuth(authorizationStatus) || isDataLoaded) {
+  if (!isDataLoaded) {
     return (
       <LoadingScreen />
     );

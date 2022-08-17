@@ -1,11 +1,10 @@
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hooks';
 import OfferList from '../../components/offer-list/offer-list';
 import SiteHeader from '../../components/site-header/site-header';
-import { Offer } from '../../types/types';
-import { State } from '../../types/state';
+import { getOffers } from '../../store/offers-data/selectors';
 
 function FavoritesPage(): JSX.Element {
-  const allOffers = useSelector<State, Offer[] | null>((store) => store.allOffers);
+  const allOffers = useAppSelector(getOffers);
   const favoriteCities: string[] = [ ...new Set(allOffers?.map((item) => item.city.name))];
 
   return (

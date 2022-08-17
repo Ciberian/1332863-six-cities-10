@@ -15,8 +15,6 @@ function OfferList({ offers, classPrefix, onOfferCardHover, onOfferCardLeave }: 
         <OfferCard
           offer={offer}
           classPrefix={classPrefix}
-          onOfferCardHover={onOfferCardHover}
-          onOfferCardLeave={onOfferCardLeave}
           key={offer.id}
         />
       ))}

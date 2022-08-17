@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import SiteHeader from '../../components/site-header/site-header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import OfferItems from '../../components/offer-items/offer-items';
@@ -8,48 +7,50 @@ import ReviewList from '../../components/review-list/review-list';
 import ReviewForm from '../../components/review-form/review-form';
 import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
-import { Offer, Review } from '../../types/types';
-import { State } from '../../types/state';
+import { useAppSelector } from '../../hooks';
 import { AppRoute, AuthorizationStatus } from '../../const';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { getOffers } from '../../store/offers-data/selectors';
+import { Offer, Review } from '../../types/types';
 import { api } from '../../store';
 
 function OfferPage(): JSX.Element {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const authorizationStatus = useSelector<State, string>((store) => store.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
-  const allOffers = useSelector<State, Offer[] | null>((store) => store.allOffers);
+  const allOffers = useAppSelector(getOffers);
   const currentOffer: Offer | undefined = (allOffers?.find((offer) => String(offer.id) === id));
   const [offer, setOffer] = useState<Offer | undefined>(currentOffer);
 
-  const loadOffer = async() => {
+  const loadOffer = useCallback(async() => {
     try {
       const { data } = await api.get<Offer>(`hotels/${id}`);
       setOffer(data);
     } catch (error) {
       navigate(AppRoute.PageNotFound);
     }
-  };
+  }, [id, navigate]);
 
   useEffect(() => {
     if (!offer) {
       loadOffer();
     }
-  });
+  }, [offer, loadOffer]);
 
   const [reviews, setReviews] = useState<Review[] | null>(null);
-  const loadReviews = async() => {
+  const loadReviews = useCallback(async() => {
     const { data } = await api.get<Review[]>(`/comments/${id}`);
     setReviews(data);
-  };
+  }, [id]);
 
   useEffect(() => {
     if (!reviews) {
       loadReviews();
     }
-  });
+  }, [reviews, loadReviews]);
 
   const postReview = async(rating: string, comment: string) => {
     const { data } = await api.post<Review[]>(`/comments/${id}`, {rating, comment});
@@ -57,16 +58,16 @@ function OfferPage(): JSX.Element {
   };
 
   const [nearbyOffers, setNearbyOffers] = useState<Offer[] | null>(null);
-  const loadNearbyOffers = async() => {
+  const loadNearbyOffers = useCallback(async() => {
     const { data } = await api.get<Offer[]>(`/hotels/${id}/nearby`);
     setNearbyOffers(data);
-  };
+  }, [id]);
 
   useEffect(() => {
     if (!nearbyOffers) {
       loadNearbyOffers();
     }
-  });
+  }, [nearbyOffers, loadNearbyOffers]);
 
   const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.location);
   const currentPoint = offer?.location;
@@ -153,7 +154,6 @@ function OfferPage(): JSX.Element {
               <Map
                 currentCity={offer.city}
                 points={nearbyPoints}
-                selectedPoint={currentPoint}
               /> : ''}
           </section>
         </section>

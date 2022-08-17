@@ -2,13 +2,13 @@ import 'leaflet/dist/leaflet.css';
 import { Icon, Marker, LayerGroup } from 'leaflet';
 import { useRef, useEffect } from 'react';
 import { City, Point } from '../../types/types';
-import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
+import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT, NameSpace } from '../../const';
 import useMap from '../../hooks/use-map';
+import { useAppSelector } from '../../hooks';
 
 type MapProps = {
   currentCity: City;
   points: Point[];
-  selectedPoint: Point | undefined;
 };
 
 const defaultCustomIcon = new Icon({
@@ -24,7 +24,8 @@ const currentCustomIcon = new Icon({
 });
 
 function Map(props: MapProps): JSX.Element {
-  const {currentCity: {name, location}, points, selectedPoint} = props;
+  const {currentCity: {name, location}, points} = props;
+  const selectedPoint = useAppSelector((state) => state[NameSpace.Point].point);
   const mapRef = useRef(null);
   const map = useMap(mapRef, props.currentCity);
   const currentCityName = name;
@@ -48,7 +49,7 @@ function Map(props: MapProps): JSX.Element {
 
         marker
           .setIcon(
-            selectedPoint !== undefined &&
+            selectedPoint !== null &&
             point.latitude === selectedPoint?.latitude &&
             point.longitude === selectedPoint?.longitude
               ? currentCustomIcon

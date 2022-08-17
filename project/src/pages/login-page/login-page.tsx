@@ -1,24 +1,24 @@
 import { useRef, useEffect, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-actions';
-import { AppDispatch, State } from '../../types/state';
 import { AuthData } from '../../types/types';
 import { AppRoute, AuthorizationStatus } from '../../const';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
 function LoginPage(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-  const authorizationStatus = useSelector<State, string>((store) => store.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (authorizationStatus === AuthorizationStatus.Auth) {
       navigate(AppRoute.Root);
     }
-  });
+  }, [authorizationStatus, navigate]);
 
   const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
@@ -78,7 +78,7 @@ function LoginPage(): JSX.Element {
                   type="password"
                   name="password"
                   placeholder="Password"
-                  pattern="(?=.*[0-9])(?=.*[a-zA-Z | а-яёЁА-Я])[a-zA-Zа-яёЁА-Я0-9]{2,16}"
+                  pattern="(?=.*[0-9])(?=.*[a-zA-Z | а-яёЁА-Я])[a-zA-Zа-яёЁА-Я0-9]{2,42}"
                   required
                 />
               </div>

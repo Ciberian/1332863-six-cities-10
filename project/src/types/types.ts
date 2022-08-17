@@ -61,7 +61,6 @@ export type InitialState = {
   city: string;
   allOffers: Offer[] | null;
   sortType: string;
-  authorizationStatus: string;
   error: string | null;
   isDataLoaded: boolean;
   userInfo: null | UserInfo
@@ -73,7 +72,10 @@ export type AuthData = {
 };
 
 export type UserData = {
-  id: number;
-  email: string;
-  token: string;
-};
+  avatarUrl: string
+  email: string
+  id: number
+  isPro: boolean
+  name: string
+  token: string
+}
