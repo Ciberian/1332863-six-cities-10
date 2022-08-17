@@ -45,7 +45,8 @@ export enum NameSpace {
   Data = 'DATA',
   User = 'USER',
   Sort = 'SORT',
-  City = 'CITY'
+  City = 'CITY',
+  Error = 'ERROR'
 }
 
 export const URL_MARKER_DEFAULT = 'img/pin.svg';

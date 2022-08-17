@@ -7,5 +7,3 @@ export const changeSortType = createAction('changeSortType', (sortType) => ({
 export const changeCity = createAction('changeCity', (city) => ({
   payload: city
 }));
-
-export const setError = createAction<string | null>('setError');
