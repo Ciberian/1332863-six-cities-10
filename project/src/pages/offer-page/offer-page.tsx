@@ -77,7 +77,7 @@ function OfferPage(): JSX.Element {
 
   return (
     <div className="page">
-      <SiteHeader isActive count={3} />
+      <SiteHeader favorites={3} />
 
       <main className="page__main page__main--property">
         <section className="property">

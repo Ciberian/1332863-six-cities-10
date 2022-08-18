@@ -25,6 +25,7 @@ export type UserProcess = {
 
 export type OfferData = {
   offers: Offer[],
+  favoriteOffers: Offer[],
   isDataLoaded: boolean
 };
 

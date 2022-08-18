@@ -9,7 +9,7 @@ function FavoritesPage(): JSX.Element {
 
   return (
     <div className="page">
-      <SiteHeader isActive count={3} />
+      <SiteHeader favorites={3} />
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
