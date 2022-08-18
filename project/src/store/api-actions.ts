@@ -56,7 +56,7 @@ export const loginAction = createAsyncThunk<
 		state: State;
 		extra: AxiosInstance;
 	}
->('user/login', async ({ login: email, password }, { dispatch, extra: api }) => {
+>('user/login', async ({ login: email, password }, { extra: api }) => {
   const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
   saveToken(data.token);
   return data;
@@ -70,7 +70,7 @@ export const logoutAction = createAsyncThunk<
 		state: State;
 		extra: AxiosInstance;
 	}
->('user/logout', async (_arg, { dispatch, extra: api }) => {
+>('user/logout', async (_arg, { extra: api }) => {
   await api.delete(APIRoute.Logout);
   dropToken();
 });

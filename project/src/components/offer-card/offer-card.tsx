@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
 import { Offer } from '../../types/types';
 import { setPoint } from '../../store/selected-point/selected-point';
+import { changeFavoriteOffersAction } from '../../store/api-actions';
 
 type OfferCardProps = {
   offer: Offer;
@@ -48,7 +49,12 @@ function OfferCard({ offer, classPrefix }: OfferCardProps): JSX.Element {
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`} type="button">
+          <button
+            className={`place-card__bookmark-button button
+            ${isFavorite ? 'place-card__bookmark-button--active' : ''}`}
+            type="button"
+            onClick={() => dispatch(changeFavoriteOffersAction({id, isFavorite: !isFavorite}))}
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
