@@ -21,7 +21,7 @@ export const offersData = createSlice({
         state.offers = action.payload;
         state.isDataLoaded = true;
       })
-      .addCase(fetchOffersAction.rejected, (state, action) => {
+      .addCase(fetchOffersAction.rejected, (state) => {
         state.isDataLoaded = true;
       });
   }
