@@ -10,7 +10,6 @@ import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import { getOffers } from '../../store/offers-data/selectors';
 import { Offer, Review } from '../../types/types';
 import { api } from '../../store';
 
@@ -21,11 +20,9 @@ function OfferPage(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
-  const allOffers = useAppSelector(getOffers);
-  const currentOffer: Offer | undefined = (allOffers?.find((offer) => String(offer.id) === id));
-  const [offer, setOffer] = useState<Offer | undefined>(currentOffer);
+  const [offer, setOffer] = useState<Offer | undefined>();
 
-  const loadOffer = useCallback(async() => {
+  const loadOffer = useCallback(async () => {
     try {
       const { data } = await api.get<Offer>(`hotels/${id}`);
       setOffer(data);
@@ -35,22 +32,22 @@ function OfferPage(): JSX.Element {
   }, [id, navigate]);
 
   useEffect(() => {
-    if (!offer) {
+    if (!offer || offer.id !== Number(id)) {
       loadOffer();
     }
-  }, [offer, loadOffer]);
+  }, [id, offer, loadOffer]);
 
   const [reviews, setReviews] = useState<Review[] | null>(null);
-  const loadReviews = useCallback(async() => {
-    const { data } = await api.get<Review[]>(`/comments/${id}`);
+  const loadReviews = useCallback(async(offerId: string | undefined) => {
+    const { data } = await api.get<Review[]>(`/comments/${offerId}`);
     setReviews(data);
-  }, [id]);
+  }, []);
 
   useEffect(() => {
-    if (!reviews) {
-      loadReviews();
+    if (!reviews || offer?.id !== Number(id) ) {
+      loadReviews(id);
     }
-  }, [reviews, loadReviews]);
+  }, [id, reviews, loadReviews, offer?.id]);
 
   const postReview = async(rating: string, comment: string) => {
     const { data } = await api.post<Review[]>(`/comments/${id}`, {rating, comment});
@@ -64,10 +61,10 @@ function OfferPage(): JSX.Element {
   }, [id]);
 
   useEffect(() => {
-    if (!nearbyOffers) {
+    if (!nearbyOffers || offer?.id !== Number(id)) {
       loadNearbyOffers();
     }
-  }, [nearbyOffers, loadNearbyOffers]);
+  }, [id, nearbyOffers, loadNearbyOffers, offer?.id]);
 
   const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.location);
   const currentPoint = offer?.location;
