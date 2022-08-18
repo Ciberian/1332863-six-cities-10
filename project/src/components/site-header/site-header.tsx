@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getUserInfo } from '../../store/user-process/selectors';
+import { getFavoriteOffersCount } from '../../store/offers-data/selectors';
 import { logoutAction } from '../../store/api-actions';
 import { AppRoute } from '../../const';
 
-type SiteHeaderProps = {
-  favorites: number;
-};
-
-function SiteHeader({ favorites }: SiteHeaderProps) {
+function SiteHeader() {
   const userInfo = useAppSelector(getUserInfo);
+  const favoriteOffersCount = useAppSelector(getFavoriteOffersCount);
   const dispatch = useAppDispatch();
 
   const handleSignOut = (evt: { preventDefault: () => void; }) => {
@@ -36,7 +34,7 @@ function SiteHeader({ favorites }: SiteHeaderProps) {
                         <img src={userInfo.avatarUrl} alt="userAvatar" />
                       </div>
                       <span className="header__user-name user__name">{userInfo.name}</span>
-                      <span className="header__favorite-count">{favorites}</span>
+                      <span className="header__favorite-count">{favoriteOffersCount}</span>
                     </Link>
                   </li>
                   <li className="header__nav-item">

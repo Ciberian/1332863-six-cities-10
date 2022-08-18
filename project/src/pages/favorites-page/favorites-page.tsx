@@ -9,7 +9,7 @@ function FavoritesPage(): JSX.Element {
 
   return (
     <div className={`page ${favoriteOffersCount ? '' : 'page--favorites-empty'}`}>
-      <SiteHeader favorites={favoriteOffersCount} />
+      <SiteHeader />
 
       <main className={`page__main page__main--favorites ${favoriteOffersCount ? '' : 'page__main--favorites-empty'}`}>
         <div className="page__favorites-container container">

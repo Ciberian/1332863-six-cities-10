@@ -7,7 +7,7 @@ import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
 import { Offer } from '../../types/types';
 import { SortType } from '../../const';
-import { getOffers, getFavoriteOffersCount } from '../../store/offers-data/selectors';
+import { getOffers } from '../../store/offers-data/selectors';
 import { getCity } from '../../store/selected-city/selectors';
 import { getSortType } from '../../store/selected-sort/selectors';
 
@@ -15,7 +15,6 @@ function MainPage(): JSX.Element {
   const cityName = useAppSelector(getCity);
   const allOffers = useAppSelector(getOffers);
   const currentSortType = useAppSelector(getSortType);
-  const favoriteOffersCount = useAppSelector(getFavoriteOffersCount);
 
   if (allOffers.length) {
     const cityOffers = allOffers?.filter((offer) => offer.city.name === cityName);
@@ -39,7 +38,7 @@ function MainPage(): JSX.Element {
 
     return (
       <div className="page page--gray page--main">
-        <SiteHeader favorites={favoriteOffersCount} />
+        <SiteHeader />
 
         <main className={`page__main page__main--index ${cityOffers ? '' : 'page__main--index-empty'}`}>
           <h1 className="visually-hidden">Cities</h1>
@@ -80,7 +79,7 @@ function MainPage(): JSX.Element {
   } else {
     return (
       <div className="page page--gray page--main">
-        <SiteHeader favorites={5} />
+        <SiteHeader />
         <main className={'page__main page__main--index page__main--index-empty'}>
           <h1 className="visually-hidden">Cities</h1>
           <div className="tabs">
