@@ -11,7 +11,7 @@ export type SelectedSort = {
 };
 
 export type SelectedPoint = {
-  point: null | Point;
+  point: undefined | Point;
 };
 
 export type CurrentError = {

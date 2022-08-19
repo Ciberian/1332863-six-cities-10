@@ -6,7 +6,7 @@ import OfferItems from '../../components/offer-items/offer-items';
 import ReviewList from '../../components/review-list/review-list';
 import ReviewForm from '../../components/review-form/review-form';
 import OfferList from '../../components/offer-list/offer-list';
-import Map from '../../components/map/map';
+import OfferPageMap from '../../components/offer-page-map/offer-page-map';
 import { useAppSelector } from '../../hooks';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
@@ -21,8 +21,7 @@ function OfferPage(): JSX.Element {
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
   const [offer, setOffer] = useState<Offer | undefined>();
-
-  const loadOffer = useCallback(async () => {
+  const loadOffer = useCallback(async() => {
     try {
       const { data } = await api.get<Offer>(`hotels/${id}`);
       setOffer(data);
@@ -44,10 +43,8 @@ function OfferPage(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (!reviews || offer?.id !== Number(id) ) {
-      loadReviews(id);
-    }
-  }, [id, reviews, loadReviews, offer?.id]);
+    loadReviews(id);
+  }, [id, loadReviews]);
 
   const postReview = async(rating: string, comment: string) => {
     const { data } = await api.post<Review[]>(`/comments/${id}`, {rating, comment});
@@ -61,16 +58,8 @@ function OfferPage(): JSX.Element {
   }, [id]);
 
   useEffect(() => {
-    if (!nearbyOffers || offer?.id !== Number(id)) {
-      loadNearbyOffers();
-    }
-  }, [id, nearbyOffers, loadNearbyOffers, offer?.id]);
-
-  const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.location);
-  const currentPoint = offer?.location;
-  if (currentPoint) {
-    nearbyPoints?.push(currentPoint);
-  }
+    loadNearbyOffers();
+  }, [id, loadNearbyOffers]);
 
   return (
     <div className="page">
@@ -147,10 +136,11 @@ function OfferPage(): JSX.Element {
             </div>
           </div>
           <section className="property__map map">
-            {offer?.city && nearbyPoints ?
-              <Map
+            {offer?.city && nearbyOffers ?
+              <OfferPageMap
+                currentOfferLocation={offer.location}
                 currentCity={offer.city}
-                points={nearbyPoints}
+                nearbyOffers={nearbyOffers}
               /> : ''}
           </section>
         </section>

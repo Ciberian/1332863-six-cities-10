@@ -33,7 +33,7 @@ function OfferCard({ offer, classPrefix }: OfferCardProps): JSX.Element {
         </div>
       )}
       <div className={`${classPrefix}__image-wrapper place-card__image-wrapper`}>
-        <Link to={`/offer/${String(id)}`}>
+        <Link onClick={() => dispatch(setPoint(null))} to={`/offer/${String(id)}`}>
           <img
             className="place-card__image"
             src={previewImage}
