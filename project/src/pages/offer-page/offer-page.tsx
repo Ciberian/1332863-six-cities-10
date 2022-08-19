@@ -10,7 +10,7 @@ import OfferPageMap from '../../components/offer-page-map/offer-page-map';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AuthorizationStatus } from '../../const';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/api-actions';
+import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction, changeFavoriteOffersAction } from '../../store/api-actions';
 import { getNearbyOffers, getOffer, getReviews } from '../../store/offers-data/selectors';
 
 function OfferPage(): JSX.Element {
@@ -49,7 +49,16 @@ function OfferPage(): JSX.Element {
 
               <div className="property__name-wrapper">
                 <h1 className="property__name">{offer?.title}</h1>
-                <button className={`property__bookmark-button ${offer && offer.isFavorite ? 'property__bookmark-button--active' : ''} button`} type="button">
+                <button
+                  onClick={() => {
+                    if (offer) {
+                      dispatch(changeFavoriteOffersAction({id: offer.id, isFavorite: !offer.isFavorite}));
+                    }
+                  }}
+                  className={`property__bookmark-button
+                    ${offer && offer.isFavorite ? 'property__bookmark-button--active' : ''} button`}
+                  type="button"
+                >
                   <svg className="place-card__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>

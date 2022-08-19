@@ -51,17 +51,22 @@ export const offersData = createSlice({
         state.favoriteOffers = action.payload;
       })
       .addCase(changeFavoriteOffersAction.fulfilled, (state, action) => {
-        const indexInAllOffers = state.offers.findIndex((offer) => offer.id === action.payload.id);
+        const index = state.offers.findIndex((offer) => offer.id === action.payload.id);
         state.offers = [
-          ...state.offers.slice(0, indexInAllOffers),
-          action.payload,
-          ...state.offers.slice(indexInAllOffers + 1)
+          ...state.offers.slice(0, index),
+          {...state.offers[index], isFavorite: !state.offers[index].isFavorite},
+          ...state.offers.slice(index + 1)
         ];
 
-        if (action.payload.isFavorite) {
+        if (action.payload.isFavorite &&
+            !state.favoriteOffers.find((favoriteOffer) => favoriteOffer.id === action.payload.id)) {
           state.favoriteOffers = [...state.favoriteOffers, action.payload];
         } else {
           state.favoriteOffers = state.favoriteOffers.filter((favoriteOffer) => favoriteOffer.id !== action.payload.id);
+        }
+
+        if (state.offer?.id === action.payload.id) {
+          state.offer = {...state.offer, isFavorite: !state.offer.isFavorite};
         }
       });
   }
