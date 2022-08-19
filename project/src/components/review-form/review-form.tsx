@@ -1,4 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { fetchNewReviewAction } from '../../store/api-actions';
 import ReviewRating from '../review-rating/review-rating';
 
 const MAX_REVIEW_RATING = 5;
@@ -7,10 +9,12 @@ const MIN_REVIEW_SIMBOLS = 50;
 const MAX_REVIEW_SIMBOLS = 300;
 
 type ReviewFormProps = {
-  postReview: (rating: string, comment: string) => Promise<void>
+  id: number;
 }
 
-function ReviewForm({ postReview }: ReviewFormProps): JSX.Element {
+function ReviewForm({ id }: ReviewFormProps): JSX.Element {
+  const dispatch = useAppDispatch();
+
   const [formData, setformData] = useState({
     rating: '',
     comment: '',
@@ -44,7 +48,7 @@ function ReviewForm({ postReview }: ReviewFormProps): JSX.Element {
       method="post"
       onSubmit={(evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
-        postReview(formData.rating, formData.comment);
+        dispatch(fetchNewReviewAction({rating: Number(formData.rating), review: formData.comment, id: id}));
         setformData({ rating: '', comment: '' });
       }}
     >

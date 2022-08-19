@@ -53,6 +53,12 @@ export type Review = {
   }
 }
 
+export type NewReview = {
+  rating: number;
+  review: string;
+  id: number;
+}
+
 export type UserInfo = {
   avatarUrl: string
   email: string

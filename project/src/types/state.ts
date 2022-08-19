@@ -1,6 +1,6 @@
 import { store } from '../store/index.js';
 import { AuthorizationStatus } from '../const';
-import { Offer, Point, UserInfo } from './types';
+import { Offer, Point, Review, UserInfo } from './types';
 
 export type SelectedCity = {
   city: string
@@ -25,7 +25,10 @@ export type UserProcess = {
 
 export type OfferData = {
   offers: Offer[],
+  offer: null | Offer,
   favoriteOffers: Offer[],
+  nearbyOffers: Offer[],
+  reviews: null | Review[],
   isDataLoaded: boolean
 };
 

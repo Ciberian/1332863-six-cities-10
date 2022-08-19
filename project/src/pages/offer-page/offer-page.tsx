@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import SiteHeader from '../../components/site-header/site-header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import OfferItems from '../../components/offer-items/offer-items';
@@ -7,59 +7,27 @@ import ReviewList from '../../components/review-list/review-list';
 import ReviewForm from '../../components/review-form/review-form';
 import OfferList from '../../components/offer-list/offer-list';
 import OfferPageMap from '../../components/offer-page-map/offer-page-map';
-import { useAppSelector } from '../../hooks';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { AuthorizationStatus } from '../../const';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import { Offer, Review } from '../../types/types';
-import { api } from '../../store';
+import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction } from '../../store/api-actions';
+import { getNearbyOffers, getOffer, getReviews } from '../../store/offers-data/selectors';
 
 function OfferPage(): JSX.Element {
 
   const { id } = useParams();
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
-
-  const [offer, setOffer] = useState<Offer | undefined>();
-  const loadOffer = useCallback(async() => {
-    try {
-      const { data } = await api.get<Offer>(`hotels/${id}`);
-      setOffer(data);
-    } catch (error) {
-      navigate(AppRoute.PageNotFound);
-    }
-  }, [id, navigate]);
+  const offer = useAppSelector(getOffer);
+  const reviews = useAppSelector(getReviews);
+  const nearbyOffers = useAppSelector(getNearbyOffers);
 
   useEffect(() => {
-    if (!offer || offer.id !== Number(id)) {
-      loadOffer();
-    }
-  }, [id, offer, loadOffer]);
-
-  const [reviews, setReviews] = useState<Review[] | null>(null);
-  const loadReviews = useCallback(async(offerId: string | undefined) => {
-    const { data } = await api.get<Review[]>(`/comments/${offerId}`);
-    setReviews(data);
-  }, []);
-
-  useEffect(() => {
-    loadReviews(id);
-  }, [id, loadReviews]);
-
-  const postReview = async(rating: string, comment: string) => {
-    const { data } = await api.post<Review[]>(`/comments/${id}`, {rating, comment});
-    setReviews(data);
-  };
-
-  const [nearbyOffers, setNearbyOffers] = useState<Offer[] | null>(null);
-  const loadNearbyOffers = useCallback(async() => {
-    const { data } = await api.get<Offer[]>(`/hotels/${id}/nearby`);
-    setNearbyOffers(data);
-  }, [id]);
-
-  useEffect(() => {
-    loadNearbyOffers();
-  }, [id, loadNearbyOffers]);
+    dispatch(fetchOfferAction(Number(id)));
+    dispatch(fetchNearbyOffersAction(Number(id)));
+    dispatch(fetchReviewsAction(Number(id)));
+  }, [id, dispatch]);
 
   return (
     <div className="page">
@@ -131,7 +99,7 @@ function OfferPage(): JSX.Element {
               </div>
               <section className="property__reviews reviews">
                 {reviews ? <ReviewList reviews={reviews} /> : null}
-                {isAuthorized ? <ReviewForm postReview={postReview} /> : null}
+                {isAuthorized ? <ReviewForm id={ Number(id) } /> : null}
               </section>
             </div>
           </div>
