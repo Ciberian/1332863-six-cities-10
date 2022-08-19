@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import SiteHeader from '../../components/site-header/site-header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import OfferItems from '../../components/offer-items/offer-items';
@@ -8,7 +8,7 @@ import ReviewForm from '../../components/review-form/review-form';
 import OfferList from '../../components/offer-list/offer-list';
 import OfferPageMap from '../../components/offer-page-map/offer-page-map';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { AuthorizationStatus } from '../../const';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction, changeFavoriteOffersAction } from '../../store/api-actions';
 import { getNearbyOffers, getOffer, getReviews } from '../../store/offers-data/selectors';
@@ -16,6 +16,7 @@ import { getNearbyOffers, getOffer, getReviews } from '../../store/offers-data/s
 function OfferPage(): JSX.Element {
 
   const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
@@ -51,8 +52,10 @@ function OfferPage(): JSX.Element {
                 <h1 className="property__name">{offer?.title}</h1>
                 <button
                   onClick={() => {
-                    if (offer) {
+                    if (offer && isAuthorized) {
                       dispatch(changeFavoriteOffersAction({id: offer.id, isFavorite: !offer.isFavorite}));
+                    } else {
+                      navigate(AppRoute.Login);
                     }
                   }}
                   className={`property__bookmark-button

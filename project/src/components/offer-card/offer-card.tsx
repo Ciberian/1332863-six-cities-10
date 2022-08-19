@@ -1,8 +1,10 @@
-import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Offer } from '../../types/types';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { setPoint } from '../../store/selected-point/selected-point';
 import { changeFavoriteOffersAction } from '../../store/api-actions';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
 type OfferCardProps = {
   offer: Offer;
@@ -11,7 +13,11 @@ type OfferCardProps = {
 
 function OfferCard({ offer, classPrefix }: OfferCardProps): JSX.Element {
   const { isFavorite, isPremium, previewImage, price, rating, title, type, location, id } = offer;
+
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
   return (
     <article
@@ -53,7 +59,13 @@ function OfferCard({ offer, classPrefix }: OfferCardProps): JSX.Element {
             className={`place-card__bookmark-button button
             ${isFavorite ? 'place-card__bookmark-button--active' : ''}`}
             type="button"
-            onClick={() => dispatch(changeFavoriteOffersAction({id, isFavorite: !isFavorite}))}
+            onClick={() => {
+              if (isAuthorized) {
+                dispatch(changeFavoriteOffersAction({id, isFavorite: !isFavorite}));
+              } else {
+                navigate(AppRoute.Login);
+              }
+            }}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
