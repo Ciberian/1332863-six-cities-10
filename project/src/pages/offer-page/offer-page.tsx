@@ -12,6 +12,7 @@ import { AppRoute, AuthorizationStatus } from '../../const';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction, changeFavoriteOffersAction } from '../../store/api-actions';
 import { getNearbyOffers, getOffer, getReviews } from '../../store/offers-data/selectors';
+import PageNotFound from '../page-not-found/page-not-found';
 
 function OfferPage(): JSX.Element {
 
@@ -29,6 +30,10 @@ function OfferPage(): JSX.Element {
     dispatch(fetchNearbyOffersAction(Number(id)));
     dispatch(fetchReviewsAction(Number(id)));
   }, [id, dispatch]);
+
+  if (!offer) {
+    return <PageNotFound />;
+  }
 
   return (
     <div className="page">
