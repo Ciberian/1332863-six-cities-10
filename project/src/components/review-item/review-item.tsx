@@ -1,5 +1,6 @@
-import { Review } from '../../types/types';
 import dayjs from 'dayjs';
+import { Review } from '../../types/types';
+import { ONE_STAR_RATING_IN_PERCENT } from '../../const';
 
 type ReviewItemProps = {
   review: Review;
@@ -20,7 +21,7 @@ function ReviewItem ({ review }: ReviewItemProps): JSX.Element {
       <div className="reviews__info">
         <div className="reviews__rating rating">
           <div className="reviews__stars rating__stars">
-            <span style={{width: `${rating * 20}%`}}></span>
+            <span style={{width: `${rating * ONE_STAR_RATING_IN_PERCENT}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

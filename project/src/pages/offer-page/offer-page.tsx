@@ -41,7 +41,10 @@ function OfferPage(): JSX.Element {
   }
 
   if (!offer) {
+    window.history.replaceState(null, 'Page Not Found', '/page_not_found');
     return <PageNotFound />;
+  } else {
+    window.history.replaceState(null, '', `/offer/${id}`);
   }
 
   return (
