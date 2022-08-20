@@ -23,44 +23,38 @@ const currentCustomIcon = new Icon({
   iconAnchor: [27, 39]
 });
 
-function OfferPageMap({currentOfferLocation, currentCity, nearbyOffers}: OfferPageMapProps): JSX.Element {
-  const {location: {latitude, longitude, zoom}} = currentCity;
+function OfferPageMap({ currentOfferLocation, currentCity, nearbyOffers }: OfferPageMapProps): JSX.Element {
+  const { location: { latitude, longitude, zoom }} = currentCity;
+  const { latitude: currentLatitude, longitude: currentLongitude } = currentOfferLocation;
+
   const mapRef = useRef(null);
   const map = useMap(mapRef, currentCity);
-
-  const currentSelectedPoint = currentOfferLocation;
-  const prevSelectedPoint = useRef<Point>();
   const markerGroup = useRef(new LayerGroup());
 
   useEffect(() => {
     if (map) {
       markerGroup.current.addTo(map);
+      markerGroup.current.clearLayers();
+      map.setView({lat: latitude, lng: longitude}, zoom);
 
-      if (prevSelectedPoint.current !== currentSelectedPoint) {
-        markerGroup.current.clearLayers();
-        prevSelectedPoint.current = currentSelectedPoint;
-        map.setView({lat: latitude, lng: longitude}, zoom);
-
-        const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.location);
-
-        nearbyPoints.forEach((point) => {
-          const marker = new Marker({
-            lat: point.latitude,
-            lng: point.longitude
-          });
-
-          marker.setIcon(defaultCustomIcon).addTo(markerGroup.current);
+      const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.location);
+      nearbyPoints.forEach((point) => {
+        const marker = new Marker({
+          lat: point.latitude,
+          lng: point.longitude
         });
 
-        const currentMarker = new Marker({
-          lat: currentSelectedPoint.latitude,
-          lng: currentSelectedPoint.longitude
-        });
+        marker.setIcon(defaultCustomIcon).addTo(markerGroup.current);
+      });
 
-        currentMarker.setIcon(currentCustomIcon).addTo(markerGroup.current);
-      }
+      const currentMarker = new Marker({
+        lat: currentLatitude,
+        lng: currentLongitude
+      });
+
+      currentMarker.setIcon(currentCustomIcon).addTo(markerGroup.current);
     }
-  }, [latitude, longitude, map, nearbyOffers, currentSelectedPoint, zoom]);
+  }, [latitude, longitude, zoom, currentLatitude, currentLongitude, map, nearbyOffers,]);
 
   return <div style={{height: '100%'}} ref={mapRef}></div>;
 }
