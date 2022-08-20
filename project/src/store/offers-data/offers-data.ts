@@ -54,7 +54,7 @@ export const offersData = createSlice({
         const index = state.offers.findIndex((offer) => offer.id === action.payload.id);
         state.offers = [
           ...state.offers.slice(0, index),
-          {...state.offers[index], isFavorite: !state.offers[index].isFavorite},
+          action.payload,
           ...state.offers.slice(index + 1)
         ];
 
@@ -63,6 +63,15 @@ export const offersData = createSlice({
           state.favoriteOffers = [...state.favoriteOffers, action.payload];
         } else {
           state.favoriteOffers = state.favoriteOffers.filter((favoriteOffer) => favoriteOffer.id !== action.payload.id);
+        }
+
+        if (state.nearbyOffers.find((nearbyOffer) => nearbyOffer.id === action.payload.id)) {
+          const nearbyOfferIndex = state.nearbyOffers.findIndex((nearbyOffer) => nearbyOffer.id === action.payload.id);
+          state.nearbyOffers = [
+            ...state.nearbyOffers.slice(0, nearbyOfferIndex),
+            action.payload,
+            ...state.nearbyOffers.slice(nearbyOfferIndex + 1)
+          ];
         }
 
         if (state.offer?.id === action.payload.id) {
