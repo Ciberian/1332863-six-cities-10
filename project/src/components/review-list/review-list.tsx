@@ -16,6 +16,7 @@ function ReviewList({ reviews }: ReviewListProps): JSX.Element {
       <ul className="reviews__list">
         {offerReviews
           .sort((reviewA, reviewB) => dayjs(reviewB.date).diff(dayjs(reviewA.date), 'second'))
+          .slice(0, 10)
           .map((review) => (
             <ReviewItem review={review} key={review.id} />
           ))}
