@@ -17,9 +17,9 @@ function MainPage(): JSX.Element {
   const currentSortType = useAppSelector(getSortType);
 
   if (allOffers.length) {
-    const cityOffers = allOffers?.filter((offer) => offer.city.name === cityName);
+    const cityOffers = allOffers.filter((offer) => offer.city.name === cityName);
     const currentCity = cityOffers ? cityOffers[0].city : null;
-    const points = cityOffers?.map((offer) => offer.location);
+    const points = cityOffers.map((offer) => offer.location);
 
     const sortOffers = (sortType: string, offers: Offer[]) => {
       switch (sortType) {

@@ -7,14 +7,17 @@ import ReviewList from '../../components/review-list/review-list';
 import ReviewForm from '../../components/review-form/review-form';
 import OfferList from '../../components/offer-list/offer-list';
 import OfferPageMap from '../../components/offer-page-map/offer-page-map';
+import LoadingScreen from '../../components/loading-screen/loading-screen';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AppRoute, AuthorizationStatus, ONE_STAR_RATING_IN_PERCENT } from '../../const';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction, changeFavoriteOffersAction } from '../../store/api-actions';
-import { getNearbyOffers, getOffer, getReviews } from '../../store/offers-data/selectors';
+import { getLoadedOfferStatus, getNearbyOffers, getOffer, getReviews } from '../../store/offers-data/selectors';
 import PageNotFound from '../page-not-found/page-not-found';
 
 function OfferPage(): JSX.Element {
+  const isOfferLoaded = useAppSelector(getLoadedOfferStatus);
+
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -30,6 +33,12 @@ function OfferPage(): JSX.Element {
     dispatch(fetchNearbyOffersAction(Number(id)));
     dispatch(fetchReviewsAction(Number(id)));
   }, [id, dispatch]);
+
+  if (!isOfferLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   if (!offer) {
     return <PageNotFound />;
@@ -75,7 +84,7 @@ function OfferPage(): JSX.Element {
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{width: `${offer?.rating ? Math.round(offer?.rating) * 20 : 0}%`}}></span>
+                  <span style={{width: `${offer?.rating ? Math.round(offer?.rating) * ONE_STAR_RATING_IN_PERCENT : 0}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">{offer?.rating}</span>

@@ -29,7 +29,8 @@ export type OfferData = {
   favoriteOffers: Offer[],
   nearbyOffers: Offer[],
   reviews: null | Review[],
-  isDataLoaded: boolean
+  isDataLoaded: boolean,
+  isOfferLoaded: boolean,
 };
 
 export type State = ReturnType<typeof store.getState>;

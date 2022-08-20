@@ -11,7 +11,7 @@ function FavoriteList(): JSX.Element {
       <h1 className="favorites__title">Saved listing</h1>
       <ul className="favorites__list">
         {favoriteCities.map((cityName) => (
-          <li className="favorites__locations-items" key={cityName + Math.random()}>
+          <li className="favorites__locations-items" key={cityName}>
             <div className="favorites__locations locations locations--current">
               <div className="locations__item">
                 <a className="locations__item-link" href="\#">

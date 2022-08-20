@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Offer } from '../../types/types';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AppRoute, AuthorizationStatus, ONE_STAR_RATING_IN_PERCENT } from '../../const';
 import { setPoint } from '../../store/selected-point/selected-point';
 import { changeFavoriteOffersAction } from '../../store/api-actions';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
@@ -75,7 +75,7 @@ function OfferCard({ offer, classPrefix }: OfferCardProps): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${Math.round(rating) * 20}%`}}></span>
+            <span style={{width: `${Math.round(rating) * ONE_STAR_RATING_IN_PERCENT}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
