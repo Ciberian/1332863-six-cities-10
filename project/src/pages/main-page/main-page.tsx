@@ -17,9 +17,9 @@ function MainPage(): JSX.Element {
   const currentSortType = useAppSelector(getSortType);
 
   if (allOffers.length) {
-    const cityOffers = allOffers?.filter((offer) => offer.city.name === cityName);
+    const cityOffers = allOffers.filter((offer) => offer.city.name === cityName);
     const currentCity = cityOffers ? cityOffers[0].city : null;
-    const points = cityOffers?.map((offer) => offer.location);
+    const points = cityOffers.map((offer) => offer.location);
 
     const sortOffers = (sortType: string, offers: Offer[]) => {
       switch (sortType) {
@@ -38,7 +38,7 @@ function MainPage(): JSX.Element {
 
     return (
       <div className="page page--gray page--main">
-        <SiteHeader isActive count={4} />
+        <SiteHeader />
 
         <main className={`page__main page__main--index ${cityOffers ? '' : 'page__main--index-empty'}`}>
           <h1 className="visually-hidden">Cities</h1>
@@ -79,7 +79,7 @@ function MainPage(): JSX.Element {
   } else {
     return (
       <div className="page page--gray page--main">
-        <SiteHeader isActive count={4} />
+        <SiteHeader />
         <main className={'page__main page__main--index page__main--index-empty'}>
           <h1 className="visually-hidden">Cities</h1>
           <div className="tabs">

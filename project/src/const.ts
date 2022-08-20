@@ -8,8 +8,10 @@ export enum AppRoute {
 
 export enum APIRoute {
   Offers = '/hotels',
+  Favorites = '/favorite',
   Login = '/login',
   Logout = '/logout',
+  Reviews = '/comments'
 }
 
 export enum AuthorizationStatus {
@@ -47,7 +49,7 @@ export enum NameSpace {
   Sort = 'SORT',
   City = 'CITY',
   Error = 'ERROR',
-  Point = 'Point'
+  Point = 'POINT'
 }
 
 export const URL_MARKER_DEFAULT = 'img/pin.svg';
@@ -55,3 +57,5 @@ export const URL_MARKER_DEFAULT = 'img/pin.svg';
 export const URL_MARKER_CURRENT = 'img/pin-active.svg';
 
 export const TIMEOUT_SHOW_ERROR = 3000;
+
+export const ONE_STAR_RATING_IN_PERCENT = 20;

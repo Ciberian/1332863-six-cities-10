@@ -1,83 +1,55 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import SiteHeader from '../../components/site-header/site-header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import OfferItems from '../../components/offer-items/offer-items';
 import ReviewList from '../../components/review-list/review-list';
 import ReviewForm from '../../components/review-form/review-form';
 import OfferList from '../../components/offer-list/offer-list';
-import Map from '../../components/map/map';
-import { useAppSelector } from '../../hooks';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import OfferPageMap from '../../components/offer-page-map/offer-page-map';
+import LoadingScreen from '../../components/loading-screen/loading-screen';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { AppRoute, AuthorizationStatus, ONE_STAR_RATING_IN_PERCENT } from '../../const';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import { getOffers } from '../../store/offers-data/selectors';
-import { Offer, Review } from '../../types/types';
-import { api } from '../../store';
+import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction, changeFavoriteOffersAction } from '../../store/api-actions';
+import { getLoadedOfferStatus, getNearbyOffers, getOffer, getReviews } from '../../store/offers-data/selectors';
+import PageNotFound from '../page-not-found/page-not-found';
 
 function OfferPage(): JSX.Element {
+  const isOfferLoaded = useAppSelector(getLoadedOfferStatus);
+
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
-
-  const allOffers = useAppSelector(getOffers);
-  const currentOffer: Offer | undefined = (allOffers?.find((offer) => String(offer.id) === id));
-  const [offer, setOffer] = useState<Offer | undefined>(currentOffer);
-
-  const loadOffer = useCallback(async() => {
-    try {
-      const { data } = await api.get<Offer>(`hotels/${id}`);
-      setOffer(data);
-    } catch (error) {
-      navigate(AppRoute.PageNotFound);
-    }
-  }, [id, navigate]);
+  const offer = useAppSelector(getOffer);
+  const reviews = useAppSelector(getReviews);
+  const nearbyOffers = useAppSelector(getNearbyOffers);
 
   useEffect(() => {
-    if (!offer) {
-      loadOffer();
-    }
-  }, [offer, loadOffer]);
+    dispatch(fetchOfferAction(Number(id)));
+    dispatch(fetchNearbyOffersAction(Number(id)));
+    dispatch(fetchReviewsAction(Number(id)));
+  }, [id, dispatch]);
 
-  const [reviews, setReviews] = useState<Review[] | null>(null);
-  const loadReviews = useCallback(async() => {
-    const { data } = await api.get<Review[]>(`/comments/${id}`);
-    setReviews(data);
-  }, [id]);
+  if (!isOfferLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
-  useEffect(() => {
-    if (!reviews) {
-      loadReviews();
-    }
-  }, [reviews, loadReviews]);
-
-  const postReview = async(rating: string, comment: string) => {
-    const { data } = await api.post<Review[]>(`/comments/${id}`, {rating, comment});
-    setReviews(data);
-  };
-
-  const [nearbyOffers, setNearbyOffers] = useState<Offer[] | null>(null);
-  const loadNearbyOffers = useCallback(async() => {
-    const { data } = await api.get<Offer[]>(`/hotels/${id}/nearby`);
-    setNearbyOffers(data);
-  }, [id]);
-
-  useEffect(() => {
-    if (!nearbyOffers) {
-      loadNearbyOffers();
-    }
-  }, [nearbyOffers, loadNearbyOffers]);
-
-  const nearbyPoints = nearbyOffers?.map((nearbyOffer) => nearbyOffer.location);
-  const currentPoint = offer?.location;
-  if (currentPoint) {
-    nearbyPoints?.push(currentPoint);
+  if (!offer) {
+    window.history.replaceState(null, 'Page Not Found', '/page_not_found');
+    return <PageNotFound />;
+  } else {
+    window.history.replaceState(null, '', `/offer/${id}`);
   }
 
   return (
     <div className="page">
-      <SiteHeader isActive count={3} />
+      <SiteHeader />
 
       <main className="page__main page__main--property">
         <section className="property">
@@ -95,7 +67,18 @@ function OfferPage(): JSX.Element {
 
               <div className="property__name-wrapper">
                 <h1 className="property__name">{offer?.title}</h1>
-                <button className={`property__bookmark-button ${offer && offer.isFavorite ? 'property__bookmark-button--active' : ''} button`} type="button">
+                <button
+                  onClick={() => {
+                    if (offer && isAuthorized) {
+                      dispatch(changeFavoriteOffersAction({id: offer.id, isFavorite: !offer.isFavorite}));
+                    } else {
+                      navigate(AppRoute.Login);
+                    }
+                  }}
+                  className={`property__bookmark-button
+                    ${offer && offer.isFavorite ? 'property__bookmark-button--active' : ''} button`}
+                  type="button"
+                >
                   <svg className="place-card__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -104,7 +87,7 @@ function OfferPage(): JSX.Element {
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{width: `${offer?.rating ? Math.round(offer?.rating) * 20 : 0}%`}}></span>
+                  <span style={{width: `${offer?.rating ? Math.round(offer?.rating) * ONE_STAR_RATING_IN_PERCENT : 0}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">{offer?.rating}</span>
@@ -145,15 +128,16 @@ function OfferPage(): JSX.Element {
               </div>
               <section className="property__reviews reviews">
                 {reviews ? <ReviewList reviews={reviews} /> : null}
-                {isAuthorized ? <ReviewForm postReview={postReview} /> : null}
+                {isAuthorized ? <ReviewForm id={ Number(id) } /> : null}
               </section>
             </div>
           </div>
           <section className="property__map map">
-            {offer?.city && nearbyPoints ?
-              <Map
+            {offer?.city && nearbyOffers ?
+              <OfferPageMap
+                currentOfferLocation={offer.location}
                 currentCity={offer.city}
-                points={nearbyPoints}
+                nearbyOffers={nearbyOffers}
               /> : ''}
           </section>
         </section>

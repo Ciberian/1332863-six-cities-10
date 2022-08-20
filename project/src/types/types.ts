@@ -35,6 +35,11 @@ export type Offer = {
   id: number;
 };
 
+export type favoriteOffer = {
+  id: number;
+  isFavorite: boolean;
+};
+
 export type Review = {
   comment: string
   date: string
@@ -46,6 +51,12 @@ export type Review = {
     isPro: boolean
     name: string
   }
+}
+
+export type NewReview = {
+  rating: number;
+  review: string;
+  id: number;
 }
 
 export type UserInfo = {

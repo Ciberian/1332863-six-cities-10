@@ -1,41 +1,21 @@
 import { useAppSelector } from '../../hooks';
-import OfferList from '../../components/offer-list/offer-list';
 import SiteHeader from '../../components/site-header/site-header';
-import { getOffers } from '../../store/offers-data/selectors';
+import FavoriteList from '../../components/favorite-list/favorite-list';
+import FavoriteListEmpty from '../../components/favorite-list-empty/favorite-list-empty';
+import { getFavoriteOffersCount } from '../../store/offers-data/selectors';
 
 function FavoritesPage(): JSX.Element {
-  const allOffers = useAppSelector(getOffers);
-  const favoriteCities: string[] = [ ...new Set(allOffers?.map((item) => item.city.name))];
+  const favoriteOffersCount = useAppSelector(getFavoriteOffersCount);
 
   return (
-    <div className="page">
-      <SiteHeader isActive count={3} />
+    <div className={`page ${favoriteOffersCount ? '' : 'page--favorites-empty'}`}>
+      <SiteHeader />
 
-      <main className="page__main page__main--favorites">
+      <main className={`page__main page__main--favorites ${favoriteOffersCount ? '' : 'page__main--favorites-empty'}`}>
         <div className="page__favorites-container container">
-          <section className="favorites">
-            <h1 className="favorites__title">Saved listing</h1>
-            <ul className="favorites__list">
-              {favoriteCities.map((cityName) => (
-                <li className="favorites__locations-items" key={cityName + Math.random()}>
-                  <div className="favorites__locations locations locations--current">
-                    <div className="locations__item">
-                      <a className="locations__item-link" href="\#">
-                        <span>{cityName}</span>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="favorites__places">
-                    {allOffers ?
-                      <OfferList
-                        offers={allOffers}
-                        classPrefix={'favorites'}
-                      /> : ''}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
+          {favoriteOffersCount ?
+            <FavoriteList /> :
+            <FavoriteListEmpty />}
         </div>
       </main>
 

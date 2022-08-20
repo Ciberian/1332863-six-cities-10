@@ -1,6 +1,5 @@
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hooks';
 import { changeCity } from '../../store/selected-city/selected-city';
-import { AppDispatch } from '../../types/state';
 
 type LocationProps = {
   locationName: string;
@@ -8,7 +7,7 @@ type LocationProps = {
 }
 
 function LocationItem({locationName, isActive}: LocationProps): JSX.Element {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   return (
     <li className="locations__item">

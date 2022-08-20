@@ -3,7 +3,7 @@ import { SelectedPoint } from '../../types/state';
 import { NameSpace } from '../../const';
 
 const initialState: SelectedPoint = {
-  point: null
+  point: undefined
 };
 
 export const selectedPoint = createSlice({

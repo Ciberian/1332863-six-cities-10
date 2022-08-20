@@ -1,6 +1,6 @@
 import { store } from '../store/index.js';
 import { AuthorizationStatus } from '../const';
-import { Offer, Point, UserInfo } from './types';
+import { Offer, Point, Review, UserInfo } from './types';
 
 export type SelectedCity = {
   city: string
@@ -11,7 +11,7 @@ export type SelectedSort = {
 };
 
 export type SelectedPoint = {
-  point: null | Point;
+  point: undefined | Point;
 };
 
 export type CurrentError = {
@@ -25,7 +25,12 @@ export type UserProcess = {
 
 export type OfferData = {
   offers: Offer[],
-  isDataLoaded: boolean
+  offer: null | Offer,
+  favoriteOffers: Offer[],
+  nearbyOffers: Offer[],
+  reviews: null | Review[],
+  isDataLoaded: boolean,
+  isOfferLoaded: boolean,
 };
 
 export type State = ReturnType<typeof store.getState>;
