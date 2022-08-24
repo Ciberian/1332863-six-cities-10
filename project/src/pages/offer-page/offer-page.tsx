@@ -13,7 +13,6 @@ import { AppRoute, AuthorizationStatus, ONE_STAR_RATING_IN_PERCENT } from '../..
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction, changeFavoriteOffersAction } from '../../store/api-actions';
 import { getLoadedOfferStatus, getNearbyOffers, getOffer, getReviews } from '../../store/offers-data/selectors';
-import PageNotFound from '../page-not-found/page-not-found';
 
 function OfferPage(): JSX.Element {
   const isOfferLoaded = useAppSelector(getLoadedOfferStatus);
@@ -41,10 +40,7 @@ function OfferPage(): JSX.Element {
   }
 
   if (!offer) {
-    window.history.replaceState(null, 'Page Not Found', '/page_not_found');
-    return <PageNotFound />;
-  } else {
-    window.history.replaceState(null, '', `/offer/${id}`);
+    navigate(AppRoute.PageNotFound);
   }
 
   return (
