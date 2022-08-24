@@ -3,6 +3,7 @@ import SiteHeader from '../../components/site-header/site-header';
 import FavoriteList from '../../components/favorite-list/favorite-list';
 import FavoriteListEmpty from '../../components/favorite-list-empty/favorite-list-empty';
 import { getFavoriteOffersCount } from '../../store/offers-data/selectors';
+import { Link } from 'react-router-dom';
 
 function FavoritesPage(): JSX.Element {
   const favoriteOffersCount = useAppSelector(getFavoriteOffersCount);
@@ -20,9 +21,9 @@ function FavoritesPage(): JSX.Element {
       </main>
 
       <footer className="footer container">
-        <a className="footer__logo-link" href="main.html">
+        <Link className="footer__logo-link" to="/">
           <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-        </a>
+        </Link>
       </footer>
     </div>
   );
