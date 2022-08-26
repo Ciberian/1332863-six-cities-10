@@ -1,5 +1,5 @@
-import { datatype, name, internet, image} from 'faker';
-import { Point, UserInfo } from '../types/types';
+import { datatype, name, internet, image, address, random } from 'faker';
+import { Offer, Point, UserInfo } from '../types/types';
 
 export const makeFakeUserInfo = (): UserInfo => ({
   avatarUrl: image.imageUrl(),
@@ -15,3 +15,40 @@ export const makeFakePointData = (): Point => ({
   longitude: datatype.number(),
   zoom: datatype.number()
 });
+
+export const makeFakeOffer = (): Offer[] => ([
+  {
+    city: {
+      name: address.cityName(),
+      location: {
+        latitude: Number(address.latitude()),
+        longitude: Number(address.longitude()),
+        zoom: datatype.number({ min: 10, max: 13})
+      }
+    },
+    previewImage: image.imageUrl(),
+    images: new Array(3).fill(null).map(() => (image.image())),
+    title: random.word(),
+    isFavorite: datatype.boolean(),
+    isPremium: datatype.boolean(),
+    rating: datatype.number({ min: 0, max: 5, precision: 0.1}),
+    type: random.word(),
+    bedrooms: datatype.number({min: 1, max: 5}),
+    maxAdults: datatype.number({min: 1, max: 5}),
+    price: datatype.number({min: 100, max: 1000}),
+    goods: new Array(3).fill(null).map(() => (random.words())),
+    host: {
+      id: datatype.number(),
+      name: name.firstName(),
+      isPro: datatype.boolean(),
+      avatarUrl: image.imageUrl()
+    },
+    description: random.words(15),
+    location: {
+      latitude: Number(address.latitude()),
+      longitude: Number(address.longitude()),
+      zoom: datatype.number({ min: 10, max: 13})
+    },
+    id: datatype.number()
+  }
+]);
