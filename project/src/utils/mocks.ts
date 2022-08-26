@@ -1,5 +1,5 @@
-import { datatype, name, internet, image, address, random } from 'faker';
-import { Offer, Point, UserInfo } from '../types/types';
+import { datatype, name, internet, image, address, random, date } from 'faker';
+import { Offer, Point, Review, UserInfo } from '../types/types';
 
 export const makeFakeUserInfo = (): UserInfo => ({
   avatarUrl: image.imageUrl(),
@@ -11,20 +11,16 @@ export const makeFakeUserInfo = (): UserInfo => ({
 });
 
 export const makeFakePointData = (): Point => ({
-  latitude: datatype.number(),
-  longitude: datatype.number(),
-  zoom: datatype.number()
+  latitude: Number(address.latitude()),
+  longitude: Number(address.longitude()),
+  zoom: datatype.number({ min: 10, max: 13})
 });
 
-export const makeFakeOffer = (): Offer[] => ([
+export const makeFakeOffer = (id: number): Offer => (
   {
     city: {
       name: address.cityName(),
-      location: {
-        latitude: Number(address.latitude()),
-        longitude: Number(address.longitude()),
-        zoom: datatype.number({ min: 10, max: 13})
-      }
+      location: makeFakePointData()
     },
     previewImage: image.imageUrl(),
     images: new Array(3).fill(null).map(() => (image.image())),
@@ -49,6 +45,19 @@ export const makeFakeOffer = (): Offer[] => ([
       longitude: Number(address.longitude()),
       zoom: datatype.number({ min: 10, max: 13})
     },
-    id: datatype.number()
+    id: id
   }
-]);
+);
+
+export const makeFakeReview = (): Review => ({
+  comment: random.words(22),
+  date: String(date.recent()),
+  id: datatype.number(),
+  rating: datatype.number({ min: 0, max: 5, precision: 0.1}),
+  user: {
+    avatarUrl: image.imageUrl(),
+    id: datatype.number(),
+    isPro: datatype.boolean(),
+    name: name.firstName(),
+  }
+});
