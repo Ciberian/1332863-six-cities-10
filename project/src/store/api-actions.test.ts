@@ -2,7 +2,7 @@ import { Action } from 'redux';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
 import { configureMockStore } from '@jedmao/redux-mock-store';
-import { createAPI } from '../services/api';
+import { api } from './index';
 import { APIRoute } from '../const';
 import { State } from '../types/state';
 import { AuthData } from '../types/types';
@@ -29,7 +29,6 @@ const fakeOffer = makeFakeOffer(DEFAULT_ID);
 const fakeReviews = new Array(REVIEWS_COUNT).fill(null).map(() => (makeFakeReview()));
 
 describe('Async actions', () => {
-  const api = createAPI();
   const mockAPI = new MockAdapter(api);
   const middlewares = [thunk.withExtraArgument(api)];
 
@@ -156,6 +155,7 @@ describe('Async actions', () => {
 
     expect(actions).toEqual([
       checkAuthAction.pending.type,
+      fetchFavoriteOffersAction.pending.type,
       checkAuthAction.fulfilled.type
     ]);
   });
