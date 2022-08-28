@@ -6,11 +6,27 @@ import { createAPI } from '../services/api';
 import { APIRoute } from '../const';
 import { State } from '../types/state';
 import { AuthData } from '../types/types';
+import { makeFakeOffer, makeFakeReview } from '../utils/mocks';
 import {
+  fetchOffersAction,
+  fetchOfferAction,
+  fetchNearbyOffersAction,
+  fetchReviewsAction,
+  fetchNewReviewAction,
+  fetchFavoriteOffersAction,
+  changeFavoriteOffersAction,
   checkAuthAction,
   loginAction,
   logoutAction
 } from './api-actions';
+
+const DEFAULT_ID = 0;
+const OFFERS_COUNT = 10;
+const REVIEWS_COUNT = 10;
+
+const fakeOffers = new Array(OFFERS_COUNT).fill(null).map((offer, index) => (makeFakeOffer(index)));
+const fakeOffer = makeFakeOffer(DEFAULT_ID);
+const fakeReviews = new Array(REVIEWS_COUNT).fill(null).map(() => (makeFakeReview()));
 
 describe('Async actions', () => {
   const api = createAPI();
@@ -22,6 +38,111 @@ describe('Async actions', () => {
       Action,
       ThunkDispatch<State, typeof api, Action>
     >(middlewares);
+
+  it('should dispatch fetchOffersAction when GET/offers', async () => {
+    mockAPI
+      .onGet(APIRoute.Offers)
+      .reply(200, fakeOffers);
+
+    const store = mockStore();
+    await store.dispatch(fetchOffersAction());
+    const actions = store.getActions().map(({type}) => type);
+
+    expect(actions).toEqual([
+      fetchOffersAction.pending.type,
+      fetchOffersAction.fulfilled.type
+    ]);
+  });
+
+  it('should dispatch fetchOfferAction when GET/offer', async () => {
+    mockAPI
+      .onGet(`${APIRoute.Offers}/${fakeOffer.id}`)
+      .reply(200, fakeOffer);
+
+    const store = mockStore();
+    await store.dispatch(fetchOfferAction(fakeOffer.id));
+    const actions = store.getActions().map(({type}) => type);
+
+    expect(actions).toEqual([
+      fetchOfferAction.pending.type,
+      fetchOfferAction.fulfilled.type
+    ]);
+  });
+
+  it('should dispatch fetchNearbyOffersAction when GET/nearby', async () => {
+    mockAPI
+      .onGet(`${APIRoute.Offers}/${fakeOffer.id}/nearby`)
+      .reply(200, fakeOffers);
+
+    const store = mockStore();
+    await store.dispatch(fetchNearbyOffersAction(fakeOffer.id));
+    const actions = store.getActions().map(({type}) => type);
+
+    expect(actions).toEqual([
+      fetchNearbyOffersAction.pending.type,
+      fetchNearbyOffersAction.fulfilled.type
+    ]);
+  });
+
+  it('should dispatch fetchReviewsAction when GET/comments', async () => {
+    mockAPI
+      .onGet(`${APIRoute.Reviews}/${fakeOffer.id}`)
+      .reply(200, fakeReviews);
+
+    const store = mockStore();
+    await store.dispatch(fetchReviewsAction(fakeOffer.id));
+    const actions = store.getActions().map(({type}) => type);
+
+    expect(actions).toEqual([
+      fetchReviewsAction.pending.type,
+      fetchReviewsAction.fulfilled.type
+    ]);
+  });
+
+  it('should dispatch fetchNewReviewAction when POST/comments/id', async () => {
+    mockAPI
+      .onPost(`${APIRoute.Reviews}/${fakeOffer.id}`)
+      .reply(200, fakeReviews);
+
+    const store = mockStore();
+    await store.dispatch(fetchNewReviewAction({rating: 4, review: 'review text', id: fakeOffer.id}));
+    const actions = store.getActions().map(({type}) => type);
+
+    expect(actions).toEqual([
+      fetchNewReviewAction.pending.type,
+      fetchNewReviewAction.fulfilled.type
+    ]);
+  });
+
+  it('should dispatch fetchFavoriteOffersAction when GET/favorites', async () => {
+    mockAPI
+      .onGet(APIRoute.Favorites)
+      .reply(200, fakeOffers);
+
+    const store = mockStore();
+    await store.dispatch(fetchFavoriteOffersAction());
+    const actions = store.getActions().map(({type}) => type);
+
+    expect(actions).toEqual([
+      fetchFavoriteOffersAction.pending.type,
+      fetchFavoriteOffersAction.fulfilled.type
+    ]);
+  });
+
+  it('should dispatch changeFavouriteOffersAction when POST /favorite/id/status', async () => {
+    mockAPI
+      .onPost(`${APIRoute.Favorites}/${fakeOffer.id}/${Number(!fakeOffer.isFavorite)}`)
+      .reply(200, {...fakeOffer, isFavorite: !fakeOffer.isFavorite});
+
+    const store = mockStore();
+    await store.dispatch(changeFavoriteOffersAction({...fakeOffer, isFavorite: !fakeOffer.isFavorite}));
+    const actions = store.getActions().map(({type}) => type);
+
+    expect(actions).toEqual([
+      changeFavoriteOffersAction.pending.type,
+      changeFavoriteOffersAction.fulfilled.type
+    ]);
+  });
 
   it('should authorization status is "AUTH" when server return 200', async () => {
     const store = mockStore();
