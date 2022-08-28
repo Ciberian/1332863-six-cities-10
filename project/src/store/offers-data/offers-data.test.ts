@@ -11,9 +11,13 @@ import {
   changeFavoriteOffersAction,
 } from '../api-actions';
 
-const fakeOffers = new Array(10).fill(null).map((offer, index) => (makeFakeOffer(index)));
-const fakeOffer = makeFakeOffer(0);
-const fakeReviews = new Array(10).fill(null).map(() => (makeFakeReview()));
+const DEFAULT_ID = 0;
+const OFFERS_COUNT = 10;
+const REVIEWS_COUNT = 10;
+
+const fakeOffers = new Array(OFFERS_COUNT).fill(null).map((offer, index) => (makeFakeOffer(index)));
+const fakeOffer = makeFakeOffer(DEFAULT_ID);
+const fakeReviews = new Array(REVIEWS_COUNT).fill(null).map(() => (makeFakeReview()));
 
 const changedOffer = {...fakeOffer, isFavorite: !fakeOffer.isFavorite};
 const changedState: OfferData = {
