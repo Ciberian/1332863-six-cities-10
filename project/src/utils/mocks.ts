@@ -20,7 +20,7 @@ export const makeFakePointData = (): Point => ({
 export const makeFakeOffer = (id: number): Offer => (
   {
     city: {
-      name: address.cityName(),
+      name: 'Paris',
       location: makeFakePointData()
     },
     previewImage: image.imageUrl(),
