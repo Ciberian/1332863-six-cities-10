@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import HistoryRouter from '../history-route/history-route';
+import HistoryRouter from '../history-router/history-router';
 import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { fakeOffer } from '../../utils/mocks';

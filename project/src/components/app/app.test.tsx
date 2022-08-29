@@ -6,7 +6,7 @@ import { AuthorizationStatus, AppRoute, NameSpace, SortType } from '../../const'
 import { fakeOffer, fakeOffers } from '../../utils/mocks';
 import { api } from '../../store';
 import thunk from 'redux-thunk';
-import HistoryRouter from '../history-route/history-route';
+import HistoryRouter from '../history-router/history-router';
 import App from './app';
 
 const middlewares = [thunk.withExtraArgument(api)];
