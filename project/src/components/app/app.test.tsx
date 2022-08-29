@@ -19,14 +19,28 @@ const store = mockStore({
     favoriteOffers: fakeOffers,
     nearbyOffers: fakeOffers,
     reviews: null,
-    isDataLoaded: false,
-    isOfferLoaded: false,
+    isDataLoaded: true,
+    isOfferLoaded: true,
   },
-  [NameSpace.User]: {authorizationStatus: AuthorizationStatus.Auth, userInfo: null},
+  [NameSpace.User]: {authorizationStatus: AuthorizationStatus.NoAuth, userInfo: null},
   [NameSpace.City]: {city: 'Paris'},
   [NameSpace.Sort]: {sortType: SortType.Popular},
   [NameSpace.Point]: {point: null},
   [NameSpace.Error]: {error: null},
+});
+
+const storeForFavorites = mockStore({
+  [NameSpace.Data]: {
+    offers: fakeOffers,
+    offer: fakeOffer,
+    favoriteOffers: fakeOffers,
+    nearbyOffers: fakeOffers,
+    reviews: null,
+    isDataLoaded: true,
+    isOfferLoaded: true,
+  },
+  [NameSpace.User]: {authorizationStatus: AuthorizationStatus.Auth, userInfo: null},
+  [NameSpace.City]: {city: 'Paris'},
 });
 
 const history = createMemoryHistory();
@@ -39,26 +53,34 @@ const fakeApp = (
   </Provider>
 );
 
+const fakeFavoritesApp = (
+  <Provider store={storeForFavorites}>
+    <HistoryRouter history={history}>
+      <App />
+    </HistoryRouter>
+  </Provider>
+);
+
 describe('Application Routing', () => {
   it('should render "MainPage" when user navigate to "/"', () => {
     history.push(AppRoute.Root);
     render(fakeApp);
 
-    expect(screen.getByText(/[0-9]{2} places to stay/i)).toBeInTheDocument();
-    expect(screen.getByText(/Paris/i)).toBeInTheDocument();
+    expect(screen.getByText(/[0-9]{2} places to stay in Paris/i)).toBeInTheDocument();
+    expect(screen.getByText(/Dusseldorf/i)).toBeInTheDocument();
   });
 
   it('should render "LoginPage" when user navigate to "/login"', () => {
     history.push(AppRoute.Login);
     render(fakeApp);
 
-    expect(screen.getByLabelText(/E-mail/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Password/i)).toBeInTheDocument();
   });
 
   it('should render "FavoritesPage" when user navigate to "/favorites"', () => {
     history.push(AppRoute.Favorites);
-    render(fakeApp);
+    render(fakeFavoritesApp);
 
     expect(screen.getByText(/Saved listing/i)).toBeInTheDocument();
   });
@@ -75,7 +97,7 @@ describe('Application Routing', () => {
     history.push('/non-existent-route');
     render(fakeApp);
 
-    expect(screen.getByText('404. Page not found')).toBeInTheDocument();
-    expect(screen.getByText('Back to main')).toBeInTheDocument();
+    expect(screen.getByText('404 Error')).toBeInTheDocument();
+    expect(screen.getByText('This page does not exist.')).toBeInTheDocument();
   });
 });
