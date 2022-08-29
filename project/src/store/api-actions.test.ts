@@ -6,7 +6,7 @@ import { api } from './index';
 import { APIRoute } from '../const';
 import { State } from '../types/state';
 import { AuthData } from '../types/types';
-import { makeFakeOffer, makeFakeReview } from '../utils/mocks';
+import { fakeOffer, fakeOffers, fakeReviews } from '../utils/mocks';
 import {
   fetchOffersAction,
   fetchOfferAction,
@@ -19,14 +19,6 @@ import {
   loginAction,
   logoutAction
 } from './api-actions';
-
-const DEFAULT_ID = 0;
-const OFFERS_COUNT = 10;
-const REVIEWS_COUNT = 10;
-
-const fakeOffers = new Array(OFFERS_COUNT).fill(null).map((offer, index) => (makeFakeOffer(index)));
-const fakeOffer = makeFakeOffer(DEFAULT_ID);
-const fakeReviews = new Array(REVIEWS_COUNT).fill(null).map(() => (makeFakeReview()));
 
 describe('Async actions', () => {
   const mockAPI = new MockAdapter(api);

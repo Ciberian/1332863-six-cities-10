@@ -1,6 +1,6 @@
 import { offersData } from './offers-data';
 import { OfferData } from '../../types/state';
-import { makeFakeOffer, makeFakeReview } from '../../utils/mocks';
+import { fakeOffer, fakeOffers, fakeReviews } from '../../utils/mocks';
 import {
   fetchOffersAction,
   fetchOfferAction,
@@ -10,14 +10,6 @@ import {
   fetchFavoriteOffersAction,
   changeFavoriteOffersAction,
 } from '../api-actions';
-
-const DEFAULT_ID = 0;
-const OFFERS_COUNT = 10;
-const REVIEWS_COUNT = 10;
-
-const fakeOffers = new Array(OFFERS_COUNT).fill(null).map((offer, index) => (makeFakeOffer(index)));
-const fakeOffer = makeFakeOffer(DEFAULT_ID);
-const fakeReviews = new Array(REVIEWS_COUNT).fill(null).map(() => (makeFakeReview()));
 
 const changedOffer = {...fakeOffer, isFavorite: !fakeOffer.isFavorite};
 const changedState: OfferData = {
