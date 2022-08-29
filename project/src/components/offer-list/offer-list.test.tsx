@@ -5,17 +5,17 @@ import { createMemoryHistory } from 'history';
 import { makeFakeOffer } from '../../utils/mocks';
 import { Provider } from 'react-redux';
 import { store } from '../../store';
-import OfferCard from './offer-card';
+import OfferList from './offer-list';
 
 const fakeOffer = makeFakeOffer(0);
 const history = createMemoryHistory();
 
-describe('Component: OfferCard', () => {
+describe('Component: OfferList', () => {
   it('should render correctly', () => {
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <OfferCard offer={fakeOffer} classPrefix='cities' />
+          <OfferList offers={[fakeOffer]} classPrefix='cities' />
         </HistoryRouter>
       </Provider>);
 

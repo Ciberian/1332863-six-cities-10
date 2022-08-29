@@ -2,23 +2,21 @@ import '@testing-library/jest-dom/extend-expect';
 import HistoryRouter from '../history-route/history-route';
 import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { makeFakeOffer } from '../../utils/mocks';
 import { Provider } from 'react-redux';
 import { store } from '../../store';
-import OfferCard from './offer-card';
+import LocationItem from './location-item';
 
-const fakeOffer = makeFakeOffer(0);
 const history = createMemoryHistory();
 
-describe('Component: OfferCard', () => {
+describe('Component: LocationItem', () => {
   it('should render correctly', () => {
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <OfferCard offer={fakeOffer} classPrefix='cities' />
+          <LocationItem locationName={'Paris'} isActive />
         </HistoryRouter>
       </Provider>);
 
-    expect(screen.getByText(fakeOffer.title)).toBeInTheDocument();
+    expect(screen.getByText('Paris')).toBeInTheDocument();
   });
 });
