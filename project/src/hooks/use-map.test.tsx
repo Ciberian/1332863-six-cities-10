@@ -1,21 +1,20 @@
-// import { renderHook } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
+import { useRef } from 'react';
 import { fakeOffer } from '../utils/mocks';
-// import useMap from './use-map';
+import useMap from './use-map';
 
 const fakeCurrentCity = fakeOffer.city;
 const tempFunc = () => fakeCurrentCity;
 tempFunc();
 
-// const map: HTMLElement = <div style={{height: '100%'}}></div>;
+const mapRef = renderHook(() => useRef(null)).result.current;
 
-// const mapRef: React.MutableRefObject<HTMLElement | null> = { current: map };
+describe('Hook: useMap', () => {
+  it('should return map object', () => {
+    const {result} = renderHook(() =>
+      useMap(mapRef, fakeCurrentCity),
+    );
 
-// describe('Hook: useMap', () => {
-//   it('should return map Element with heigh 100%', () => {
-//     const {result} = renderHook(() =>
-//       useMap(mapRef, fakeCurrentCity),
-//     );
-
-//     expect(result.current).toHaveHeight(100);
-//   });
-// });
+    expect(result).toBeInstanceOf(Object);
+  });
+});
