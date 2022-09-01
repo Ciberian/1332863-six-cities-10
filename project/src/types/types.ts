@@ -68,15 +68,6 @@ export type UserInfo = {
   token: string
 };
 
-export type InitialState = {
-  city: string;
-  allOffers: Offer[] | null;
-  sortType: string;
-  error: string | null;
-  isDataLoaded: boolean;
-  userInfo: null | UserInfo
-};
-
 export type AuthData = {
   login: string;
   password: string;
