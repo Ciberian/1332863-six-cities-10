@@ -1,0 +1,12 @@
+.not-found-main {
+  background-color: #f5f5f5;
+}
+
+.not-found-description a {
+  text-decoration: underline;
+  color: #4481c3;
+}
+
+.not-found-footer {
+  background-color: #f5f5f5;
+}

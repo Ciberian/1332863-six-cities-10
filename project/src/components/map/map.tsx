@@ -5,6 +5,7 @@ import { City, Point } from '../../types/types';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT, NameSpace } from '../../const';
 import useMap from '../../hooks/use-map';
 import { useAppSelector } from '../../hooks';
+import './map.css';
 
 type MapProps = {
   currentCity: City;
@@ -60,7 +61,7 @@ function Map(props: MapProps): JSX.Element {
     }
   }, [currentCityName, location.latitude, location.longitude, location.zoom, map, points, selectedPoint]);
 
-  return <div style={{height: '100%'}} ref={mapRef}></div>;
+  return <div className="map-container" ref={mapRef}></div>;
 }
 
 export default Map;

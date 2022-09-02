@@ -4,6 +4,7 @@ import { useRef, useEffect } from 'react';
 import { City, Offer, Point } from '../../types/types';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 import useMap from '../../hooks/use-map';
+import './offer-page-map.css';
 
 type OfferPageMapProps = {
   currentOfferLocation: Point;
@@ -56,7 +57,7 @@ function OfferPageMap({ currentOfferLocation, currentCity, nearbyOffers }: Offer
     }
   }, [latitude, longitude, zoom, currentLatitude, currentLongitude, map, nearbyOffers,]);
 
-  return <div style={{height: '100%'}} ref={mapRef}></div>;
+  return <div className="offer-page-map-container" ref={mapRef}></div>;
 }
 
 export default OfferPageMap;
