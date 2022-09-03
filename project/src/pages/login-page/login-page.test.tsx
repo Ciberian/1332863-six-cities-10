@@ -10,7 +10,7 @@ import LoginPage from './login-page';
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
-describe('Component: FavoritePage', () => {
+describe('Component: LoginPage', () => {
   it('should render login page correctly', () => {
     const store = mockStore({
       [NameSpace.User]: {
